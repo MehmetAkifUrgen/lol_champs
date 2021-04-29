@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React,{useState,useEffect} from 'react';
 import { StyleSheet, Text, View ,ActivityIndicator, TextInput,Image, FlatList,TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { filter } from 'lodash';
 
 export default function App() {
@@ -52,16 +53,29 @@ export default function App() {
      </View>
     );
   }
+
+
+   const gonder = ( champ )=>{
+    AsyncStorage.setItem('hero', champ).then(() => {
+      console.log("TOKEN ==>>", champ)
+
+    });
+    navigation.navigate('Detail',{champ})
+   }
    
 
 
    
    
    const renderItem= ({item}) => {
+
+    
+    
+    
     const champ=item.id
     const name=item.name
     return(
-        <TouchableOpacity onPress={ ()=> navigation.navigate('Detail',{champ} )} style={styles.hero} >
+        <TouchableOpacity onPress={()=> gonder(item.id)} style={styles.hero} >
           <Image  resizeMode="stretch" style={{width:100,height:100}} source={{uri:icon+""+item.image.full}} >
             </Image>   
             <Text style={styles.text} > {item.name} </Text>
@@ -147,7 +161,7 @@ export default function App() {
             value={query}
             onChangeText={queryText => handleSearch(queryText)}
             placeholder="Search"
-            style={{ backgroundColor: '#fff', paddingHorizontal: 20 }}
+            style={{ backgroundColor: '#fff', paddingHorizontal: 20,borderRadius:10 }}
         
       />
       </View>
