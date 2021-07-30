@@ -24,6 +24,9 @@ export default function App() {
   const [version,setVersion] = useState([]);
   const opaAnimated=new Animated.Value(1)
   const [control,setControl]=useState(false)
+  const [randoma,setRandom]=useState([])
+
+
  
   const getVersion = () => {
     fetch("https://ddragon.leagueoflegends.com/api/versions.json", {
@@ -38,7 +41,7 @@ export default function App() {
   const getChampionsName = () => {
     fetch(`http://ddragon.leagueoflegends.com/cdn/${version[0]}/data/tr_TR/champion.json`, {
     method: 'GET',
-        }).then((response)=>response.json()).then((json)=>{setData(json.data); setnewData(json.data); setIsLoading(false) })
+        }).then((response)=>response.json()).then((json)=>{setData(json.data); setnewData(json.data), setIsLoading(false) ,setControl(true) })
         .catch((err)=> {setIsLoading(false),
         setError(err)} );
         
@@ -69,8 +72,10 @@ export default function App() {
             useNativeDriver:false,
            
           })
-        ])
+        ]),
+        
       ).start()
+     
   };
      const startInterpolate = startAnimated.interpolate({
        inputRange:[0,360],
@@ -87,6 +92,7 @@ export default function App() {
       setIsLoading(true);
 
       if ( version[0] != null ){
+        
         getChampionsName()
       }
       
@@ -102,6 +108,7 @@ export default function App() {
 
    
     if (isLoading) {
+      
      return (
        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#5500dc" />
@@ -111,7 +118,8 @@ export default function App() {
 
    if (error) {
       getChampionsName()
-    
+      setControl(true)
+      setError(false)
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontSize: 18}}>
@@ -120,8 +128,8 @@ export default function App() {
      </View>
     );
   }
-    console.log("*****",Object.values(data).length )
-    console.log('--------',version[0])
+    // console.log("*****",Object.values(data).length )
+    // console.log('--------',version[0])
     
 
 
@@ -131,11 +139,11 @@ export default function App() {
     setProgress(false)
  
     AsyncStorage.setItem('hero', champ).then(() => {
-      console.log("TOKEN ==>>", champ)
+     // console.log("TOKEN ==>>", champ)
 
     });
     AsyncStorage.setItem('version', version[0]).then(() => {
-      console.log("TOKEN ==>>", version[0])
+     // console.log("TOKEN ==>>", version[0])
 
     });
     navigation.navigate('Detail',{champ})
@@ -146,11 +154,7 @@ export default function App() {
 
    
    
-   const renderItem= ({item}) => {
-
-    
-    
-    
+   const renderItem= ({item}) => {    
     const champ=item.id
     const name=item.name
     return(
@@ -163,17 +167,13 @@ export default function App() {
 
       )
     }
-    
-    
     // const searchFilter = (textToSearch) => {
         
     //     setData( Object.values(newData).filter(i => i.name.toLowerCase().includes(textToSearch.toLowerCase())));
         
         
     //   };
-
-
-      const handleSearch = (text) => {
+     const handleSearch = (text) => {
         const formattedQuery = text.toLowerCase();
         const filteredData = filter(Object.values(newData), hero => {
           return contains(hero, formattedQuery);
@@ -193,86 +193,63 @@ export default function App() {
       };
 
 
-      function renderHeader() {
-        return (
-          <View
-            style={{
-              backgroundColor: '#fff',
-              padding: 10,
-              marginVertical: 10,
-              borderRadius: 20
-            }}
-          >
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              
-              value={query}
-              onChangeText={queryText => handleSearch(queryText)}
-              placeholder="Search"
-              style={{ backgroundColor: '#fff', paddingHorizontal: 20 }}
-            />
-          </View>
-        );
+      if(data.length != 0 ){
+       
       }
-
-
-   
-  return (
-    
-    <View style={styles.container}>
-      {/* <ImageBackground style={{
-                width:'100%',
-                height: '100%',
-                resizeMode: 'cover',
-                position:'absolute'
-            }} source={require('./assets/ground.jpg')}></ImageBackground> */}
-      <View style={styles.header}> 
-          
-        <Animated.Image resizeMode="stretch" style={{opacity:opaAnimated, width:'100%',height:'100%',borderBottomLeftRadius:wp('25%'),borderBottomRightRadius:wp('25%'),
-      backgroundColor: 'transparent'}} source={require('../../assets/jarvan.jpg')} ></Animated.Image>
-      </View>
-      <View style={{marginTop:'3%',
-    marginHorizontal:'20%',
-    marginBottom:'3%'}}>
-      <TextInput
-
-            // onChangeText={(text)=>{                   
-            //     searchFilter(text)     
-            // }}
-        
-            value={query}
-            onChangeText={queryText => handleSearch(queryText)}
-            placeholder="Search"
-            style={{ backgroundColor: '#fff', paddingHorizontal: 20,borderRadius:10 }}
-        
-      />
-      </View>
-      
-      <FlatList
-                contentContainerStyle={{flexGrow:1,}}
-
-                //ListHeaderComponent={renderHeader}
-              data={Object.values(data)}
-                renderItem={renderItem}
-              refreshing={true}
-              keyExtractor={item=>item.key}
-              numColumns={4}
-              horizontal={false}
-            
-            />
-            
-      
-            
-   
-      
-      
      
-      
-      <StatusBar hidden={true} style="auto" />
-    </View>
-  );
-}
+    
+      return (
+    
+        <View style={styles.container}>
+          {/* <ImageBackground style={{
+                    width:'100%',
+                    height: '100%',
+                    resizeMode: 'cover',
+                    position:'absolute'
+                }} source={require('./assets/ground.jpg')}></ImageBackground> */}
+          <View style={styles.header}> 
+              
+            <Animated.Image resizeMode="stretch" style={{opacity:opaAnimated, width:'100%',height:'100%',borderBottomLeftRadius:wp('15%'),borderBottomRightRadius:wp('15%'),
+          backgroundColor: 'transparent'}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${Object.values(data).length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * 156)]["id"] }_0.jpg`}} ></Animated.Image>
+          </View>
+          <View style={{marginTop:'3%',
+        marginHorizontal:'20%',
+        marginBottom:'3%'}}>
+          <TextInput
+    
+                // onChangeText={(text)=>{                   
+                //     searchFilter(text)     
+                // }}
+            
+                value={query}
+                onChangeText={queryText => handleSearch(queryText)}
+                placeholder="Search"
+                style={{ backgroundColor: '#fff', paddingHorizontal: 20,borderRadius:10 }}
+            
+          />
+          </View>
+          
+          <FlatList
+                    contentContainerStyle={{flexGrow:1,}}
+    
+                    //ListHeaderComponent={renderHeader}
+                  data={Object.values(data)}
+                    renderItem={renderItem}
+                  refreshing={true}
+                  keyExtractor={item=>item.key}
+                  numColumns={4}
+                  horizontal={false}
+                
+                />
+
+          <StatusBar hidden={true} style="auto" />
+        </View>
+      );
+     }
+  
+   
+  
+
 
 const styles = StyleSheet.create({
   container: {

@@ -34,6 +34,7 @@ export default function Detail  ({route,navigation})  {
     const [control, setControl] = useState(null);
     const [skin,setSkin]=useState([])
     const headAnimated= new Animated.Value(150)
+ 
     const [kostum,setKostum] = useState(false)
     const [versions,setVersions] = useState("")
     const getChampionsDetail = () => {
@@ -226,7 +227,7 @@ export default function Detail  ({route,navigation})  {
                     resizeMode="stretch" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_0.jpg`}}>
 
                     </Animated.Image>
-                    <TouchableOpacity onPress={()=> navigation.goBack()} style={{flex:1,position:'relative',alignItems:'flex-start',justifyContent:'flex-start',zIndex:2,margin:wp('4%')}}>
+                    <TouchableOpacity onPress={()=> navigation.navigate('Home')} style={{flex:1,position:'relative',alignItems:'flex-start',justifyContent:'flex-start',zIndex:2,margin:wp('4%')}}>
                    <Image style={{width:hp('4%'),height:wp('8%')}} source={require('../../assets/back.png')}>
 
                             </Image>
