@@ -1,39 +1,104 @@
 import { StatusBar } from 'expo-status-bar';
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View ,ActivityIndicator, TextInput,Image, FlatList,TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View ,ActivityIndicator, TextInput,Image, FlatList,TouchableOpacity, Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { filter } from 'lodash';
+import LottieView from 'lottie-react-native';
+import { Animated, Easing } from 'react-native';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function App() {
 
   const navigation = useNavigation();
-  const veri="http://ddragon.leagueoflegends.com/cdn/11.8.1/data/tr_TR/champion.json";
-  const icon ="http://ddragon.leagueoflegends.com/cdn/11.8.1/img/champion/";
+  const veri="http://ddragon.leagueoflegends.com/cdn/11.9.1/data/tr_TR/champion.json";
+  const icon ="http://ddragon.leagueoflegends.com/cdn/11.9.1/img/champion/";
   const [data,setData]=useState([])
   const [newData,setnewData]=useState([])
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
-  
+  const [progress,setProgress]=useState(false);
+  const startAnimated = new Animated.Value(0);
+  const [version,setVersion] = useState([]);
+  const opaAnimated=new Animated.Value(1)
+  const [control,setControl]=useState(false)
+ 
+  const getVersion = () => {
+    fetch("https://ddragon.leagueoflegends.com/api/versions.json", {
+    method: 'GET',
+        }).then((response)=>response.json()).then((json)=>{setVersion(json),setControl(true) })
+        .catch((err)=> {setIsLoading(false),
+        setError(err)} );
+        
+    };
   
 
   const getChampionsName = () => {
-    fetch(veri, {
+    fetch(`http://ddragon.leagueoflegends.com/cdn/${version[0]}/data/tr_TR/champion.json`, {
     method: 'GET',
         }).then((response)=>response.json()).then((json)=>{setData(json.data); setnewData(json.data); setIsLoading(false) })
         .catch((err)=> {setIsLoading(false),
         setError(err)} );
         
     };
-
+   
+    
+    const startAnimations = () => {
+        Animated.timing(startAnimated,{
+          toValue:360,
+          duration:1000,
+          useNativeDriver:false,
+          easing:Easing.elastic(10)
+        }).start()
+    };
+    const opaAnimations = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(opaAnimated,{
+            toValue:.3,
+            duration:3000,
+            useNativeDriver:false,
+          
+            
+          }),
+          Animated.timing(opaAnimated,{
+            toValue:1,
+            duration:3000,
+            useNativeDriver:false,
+           
+          })
+        ])
+      ).start()
+  };
+     const startInterpolate = startAnimated.interpolate({
+       inputRange:[0,360],
+       outputRange:['0deg','360deg']
+     })
+     const rotateStyles = {
+       transform:[{
+         rotate:startInterpolate
+       }]
+     }
 
     useEffect(() => {
+      getVersion();
       setIsLoading(true);
 
-      getChampionsName();
+      if ( version[0] != null ){
+        getChampionsName()
+      }
+      
      
-   },[] );
+     
+   },[control] );
+
+    useEffect(() => {
+      startAnimations();
+      opaAnimations();
+
+    })
 
    
     if (isLoading) {
@@ -45,6 +110,8 @@ export default function App() {
   }
 
    if (error) {
+      getChampionsName()
+    
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontSize: 18}}>
@@ -53,14 +120,26 @@ export default function App() {
      </View>
     );
   }
+    console.log("*****",Object.values(data).length )
+    console.log('--------',version[0])
+    
 
 
-   const gonder = ( champ )=>{
+   const gonder = ( champ,image )=>{
+    
+
+    setProgress(false)
+ 
     AsyncStorage.setItem('hero', champ).then(() => {
       console.log("TOKEN ==>>", champ)
 
     });
+    AsyncStorage.setItem('version', version[0]).then(() => {
+      console.log("TOKEN ==>>", version[0])
+
+    });
     navigation.navigate('Detail',{champ})
+   
    }
    
 
@@ -75,13 +154,16 @@ export default function App() {
     const champ=item.id
     const name=item.name
     return(
-        <TouchableOpacity onPress={()=> gonder(item.id)} style={styles.hero} >
-          <Image  resizeMode="stretch" style={{width:100,height:100}} source={{uri:icon+""+item.image.full}} >
-            </Image>   
+      
+            <TouchableOpacity onPress={()=>gonder(item.id,item.image.full)} style={styles.hero}>
+          <Animated.Image  resizeMode="stretch" style={{width:wp('20%'),height:hp('10%'),transform:[{rotate:startInterpolate}],borderRadius:wp('5%')}} source={{uri:icon+""+item.image.full}} >
+            </Animated.Image>   
             <Text style={styles.text} > {item.name} </Text>
         </TouchableOpacity>
+
       )
     }
+    
     
     // const searchFilter = (textToSearch) => {
         
@@ -147,7 +229,8 @@ export default function App() {
             }} source={require('./assets/ground.jpg')}></ImageBackground> */}
       <View style={styles.header}> 
           
-        <Image resizeMode="stretch" style={{width:'100%',height:'100%'}} source={require('../../assets/jarvan.jpg')} ></Image>
+        <Animated.Image resizeMode="stretch" style={{opacity:opaAnimated, width:'100%',height:'100%',borderBottomLeftRadius:wp('25%'),borderBottomRightRadius:wp('25%'),
+      backgroundColor: 'transparent'}} source={require('../../assets/jarvan.jpg')} ></Animated.Image>
       </View>
       <View style={{marginTop:'3%',
     marginHorizontal:'20%',
@@ -186,7 +269,7 @@ export default function App() {
       
      
       
-      <StatusBar style="auto" />
+      <StatusBar hidden={true} style="auto" />
     </View>
   );
 }
@@ -194,7 +277,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
    
   },
   header:{
@@ -202,8 +285,7 @@ const styles = StyleSheet.create({
     height:'20%',
     width:'100%'  ,
     
-    justifyContent:'center',
-    alignItems:'center',
+    
    
   },
   headerText:{
@@ -233,7 +315,8 @@ const styles = StyleSheet.create({
     marginHorizontal:'0.6%',
     
     alignItems:'center',
-    marginBottom:'2%'
+    marginBottom:'2%',
+    
   },
   text:{
     fontSize:15,

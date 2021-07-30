@@ -1,13 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View ,Alert, ActivityIndicator,Image, FlatList,ScrollView, SafeAreaView,ImageBackground} from 'react-native';
+import { StyleSheet, Text, View ,Alert, ActivityIndicator,Image, Easing,ScrollView, SafeAreaView,ImageBackground, TouchableOpacity,Animated, Touchable} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Progress from 'react-native-progress';
 import Swiper from 'react-native-swiper'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { Ionicons } from '@expo/vector-icons';
+import { color } from 'react-native-reanimated';
+import {
+    
+    BarChart,
+    PieChart,
+    ProgressChart,
+   
+    StackedBarChart
+  } from "react-native-chart-kit";
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { version } from 'react/cjs/react.development';
+
 
 export default function Detail  ({route,navigation})  {
-    const veri="http://ddragon.leagueoflegends.com/cdn/11.8.1/data/tr_TR/champion/";
+    
+
+
+    
     
     const [data,setData]=useState([]);
     const [newData,setNewData]=useState([]);
@@ -15,28 +32,53 @@ export default function Detail  ({route,navigation})  {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [control, setControl] = useState(null);
-    const skin=[]
-    
+    const [skin,setSkin]=useState([])
+    const headAnimated= new Animated.Value(150)
+    const [kostum,setKostum] = useState(false)
+    const [versions,setVersions] = useState("")
     const getChampionsDetail = () => {
         AsyncStorage.getItem('hero',(error,value) => {
-            console.log('sadsad',value)
-            if(!error){
-                setValue(value)
-                if(value !== null){
-                    fetch(`http://ddragon.leagueoflegends.com/cdn/11.8.1/data/tr_TR/champion/${value}.json`, {
-                        method: 'GET',
-                      
-                            }).then((response)=>response.json()).then((json)=>{setData(json.data); setnewData(data[deger]); setIsLoading(false),setControl(true) })
-                            .catch((err)=> {setIsLoading(false),setError(err)}
-                               );
+            AsyncStorage.getItem('version', (errorr,version) => {
+                setVersions(version)
+                console.log('sadsad',value)
+                if(!error){
+                    setValue(value)
+                    if(value !== null){
+                        fetch(`http://ddragon.leagueoflegends.com/cdn/${version}/data/tr_TR/champion/${value}.json`, {
+                            method: 'GET',
+                          
+                                }).then((response)=>response.json()).then((json)=>{setData(json.data); setnewData(data[deger]);  setIsLoading(false),setControl(true) })
+                                .catch((err)=> {setIsLoading(false),setError(err)}
+                                   );
+                               
+                            };
                            
-                        };
-                       
-                        
-                }
+                            
+                    }
+            })
+            
             }
         );
     } 
+   
+    async function changeScreenOrientation() {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+        
+      }
+      async function normalYap() {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+       
+      }
+
+    const headAnimations = () => {
+        Animated.timing(headAnimated,{
+          toValue:0,
+          duration:2000,
+          useNativeDriver:false,
+          easing:Easing.elastic(20)
+        }).start()
+    };
+    
         
 
         useEffect(() => {
@@ -46,6 +88,10 @@ export default function Detail  ({route,navigation})  {
             
             
          },[] );
+         useEffect(() => {
+            headAnimations();
+      
+          })
          
 
          if (isLoading) {
@@ -71,26 +117,25 @@ export default function Detail  ({route,navigation})  {
 
        
 
-        const renderItem= ({item}) => {
+        // const renderItem= ({item}) => {
             
-            return(
-                    <View style={{flex:1}}>
-                            <Image 
-                style={{width:'80%',height:'80%'}}    
-                resizeMode="stretch" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${deger}_${item.num}.jpg`}}>
+        //     return(
+        //             <View style={{flex:1}}>
+        //                     <Image 
+        //         style={{width:'80%',height:'80%'}}    
+        //         resizeMode="stretch" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${deger}_${item.num}.jpg`}}>
 
-                </Image>
-                    </View>
+        //         </Image>
+        //             </View>
                     
                 
                 
-              )
-            }
+        //       )
+        //     }
 
        
-         
-         
-    if(control){
+    if(kostum){
+        changeScreenOrientation();
 
         const costum = data[deger].skins.map((value,index) => {
             skin.push(value.num)
@@ -98,56 +143,114 @@ export default function Detail  ({route,navigation})  {
                 <View style={{
 
                     flex: 1,
+                    flexDirection:'column',
+                    justifyContent:'flex-end',
+                    
 
                 }}  key={index}>
                     <Image 
-                    style={{width:'100%',height:'95%'}}    
-                    resizeMode="stretch" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${deger}_${value.num}.jpg`}}>
+                    style={{width:'100%',height:'100%',position:'absolute'}}    
+                    resizeMode="stretch" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${value.num}.jpg`}}>
 
                     </Image>
+                   <TouchableOpacity onPress={()=> setKostum(false)} style={{flex:1,position:'relative',alignItems:'flex-start',justifyContent:'flex-start',zIndex:2,margin:wp('4%')}}>
+                   <Image style={{width:hp('4%'),height:wp('8%')}} source={require('../../assets/back.png')}>
 
-                    <Text style={{color:'white', fontSize:20 }}> {value.name=="default" ? deger:value.name  } </Text>
+                            </Image>
+                   </TouchableOpacity>
+                   <View style={{alignItems:'center',zIndex:3,position:'relative',marginBottom:hp('2%'),}}>
+                   <Text style={{color:'white', fontSize:hp('3%'),
+                 }}> {value.name=="default" ? deger:value.name  } </Text>
+                   </View>
+
+                    
                 </View>
                 
                 
             )
     });
+        return(
+            <Swiper>
+                {costum}
+            </Swiper>
+        )
+    }
+         
+    if(control){
+
+         data[deger].skins.map((value,index) => {
+            skin.push(value.num)
+           
+    });
+       
+        normalYap();
+        console.log('*****',skin.length)
 
         const rol = data[deger].tags.map((index) => {
                 const icon={"Assassin":require('../../assets/Assassin.png'),"Fighter":require('../../assets/Fighter.png'),
                 "Mage":require('../../assets/Mage.png'),"Marksman":require('../../assets/Marksman.png'),
                 "Support":require('../../assets/Support.png'),"Tank":require('../../assets/Tank.png')}
-                
-                
+                var index1=""
+                index=='Mage' ? index1='Büyücü' : null
+                index=='Assassin' ? index1='Suikastçi' : null
+                index=='Marksman' ? index1='Nişancı' : null
+                index=='Support' ? index1='Destek' : null
+                index=='Tank' ? index1='Tank' : null
+                index=='Fighter' ? index1='Dövüşçü' : null
                 return(
-                    <View key={index} style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}} >
-                            <Text style={{color:'white',fontSize:hp('2%')}} > {index} </Text>
+                    <View key={index} style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%'),marginHorizontal:wp('3%')}} >
+                            <Text style={{color:'white',fontSize:hp('2%')}} > {index1} </Text>
                             <Image style={{width:50,height:50}} resizeMode="stretch" source={icon[index]}></Image>
                     </View>
                     
                 )
         });
+        const datas = {
+            labels: ["SALDIRI", "SAVUNMA", "BÜYÜ","ZORLUK"], // optional
+            datasets: [
+                {
+                    data: [data[deger].info.attack*10, data[deger].info.defense*10, data[deger].info.magic*10,data[deger].info.difficulty*10]
+                }
+              ]
+          };
+
+        
 
         return(
             <SafeAreaView style={styles.container}>
                     <StatusBar style="auto" ></StatusBar>
                     <View style={styles.header}>
-                    <Image 
-                    style={{width:'100%',height:'100%'}}    
+                    <Animated.Image 
+                    style={{width:'100%',height:'100%', position:'absolute',
+                borderBottomLeftRadius:wp('3%'),borderBottomRightRadius:wp('3%'), right:headAnimated }}    
                     resizeMode="stretch" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_0.jpg`}}>
 
-                    </Image>
+                    </Animated.Image>
+                    <TouchableOpacity onPress={()=> navigation.goBack()} style={{flex:1,position:'relative',alignItems:'flex-start',justifyContent:'flex-start',zIndex:2,margin:wp('4%')}}>
+                   <Image style={{width:hp('4%'),height:wp('8%')}} source={require('../../assets/back.png')}>
+
+                            </Image>
+                   </TouchableOpacity>
+                    <TouchableOpacity onPress={()=> setKostum(true) } style={{flex:1,alignItems:'flex-end',position:'relative',justifyContent:'flex-end', marginRight:wp('2%')
+                    ,marginBottom:hp('2%')    }}>
+                            <View style={{backgroundColor:'tomato',borderRadius:wp('1%')}}>
+                            <Text style={{color:'white',fontSize:hp('2%')}}>
+                            Kostümler
+                        </Text>
+                            </View>
+                        
+                    </TouchableOpacity>
                     </View>
     
                     
                     
                     
-                        <Swiper style={styles.wrapper} >
-                            <ScrollView style={{flex:1}} >
+                        <Swiper showsButtons={true} style={styles.wrapper} >
+                            <ScrollView style={{flex:1}}  >
                                 <ImageBackground 
                                     style={{width:'100%',height:'100%',position:'absolute',opacity:0.3}} 
                                     resizeMode="cover"
-                                    source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${skin[skin.length-1]}.jpg`}}
+                                    source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/loading/${deger}_${skin[skin.length-1]}.jpg`}}
 
                                 >
 
@@ -180,9 +283,163 @@ export default function Detail  ({route,navigation})  {
                                 
                             </ScrollView>
 
-                            <View>
+                            <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
+                            <ImageBackground 
+                                    style={{width:'100%',height:'100%',position:'absolute',opacity:0.3}} 
+                                    resizeMode="stretch"
+                                    source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${skin[skin.length-2]}.jpg`}}
 
+                                >
+
+                                </ImageBackground>
+                                <BarChart
+                                   
+                                    data={datas}
+                                    width={wp('100%')}
+                                    height={hp('60%')}
+                                    withHorizontalLabels={false}
+                                    fromZero={true}
+                                    withInnerLines={false}
+                                    chartConfig={{
+
+                                        
+                                        backgroundGradientToOpacity:0.5,
+                                        backgroundGradientFrom: "#251298",
+                                        backgroundGradientTo: "#981225",
+                                        backgroundGradientFromOpacity: 0,
+                                                                            
+                                         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                       
+                                        
+                                    }}
+                                    
+                                    />
+                                
                             </View>
+                            <ScrollView style={{flex:1}}>
+                            <ImageBackground 
+                                    style={{width:'100%',height:'100%',position:'absolute',opacity:0.3}} 
+                                    resizeMode="stretch"
+                                    source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${skin[skin.length-3]}.jpg`}}
+
+                                >
+
+                                </ImageBackground>
+                                        <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                        
+                                            <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('100%'),alignItems:'center'}}>
+                                               
+                                                <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/passive/${data[deger].passive.image.full}`}} ></Image>
+                                                <Text style={[styles.specsText,{width:wp('25%')}]}> Pasif </Text>
+                                                <Text style={[styles.specsText,{width:wp('25%'),textAlign:'auto'}]}> {data[deger].passive.name} </Text>
+                                                <Text style={[styles.specsText,{width:wp('25%'),textAlign:'auto',color:'tomato'}]}> {data[deger].name} </Text>
+                                                
+                                            </View>
+                                            <Text style={styles.specsText}> {data[deger].passive.description} </Text>
+                                        </View>
+                                        <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                        
+                                            <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('100%')}}>
+                                                <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/spell/${data[deger].spells[0].id}.png`}} ></Image>
+                                                <View style={styles.skills}>
+                                                <Text style={styles.specsText}> Q </Text>
+                                                <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[0].name} </Text>
+                                                </View>
+                                                
+                                                <View style={[styles.skills],{width:wp('30%')}}>
+                                                <Text style={styles.specsText}>Bekleme Süresi</Text>
+                                                <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[0].cooldownBurn} </Text>
+                                                </View>
+                                                <View style={styles.skills}>
+                                                <Text style={styles.specsText}>Menzil</Text>
+                                                <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[0].rangeBurn} </Text>
+                                                </View>
+                                                
+                                                
+                                                
+                                            </View>
+                                            <Text style={styles.specsText}> {data[deger].spells[0].description} </Text>
+                                            <Text style={styles.specsText}> Mana Bedeli : {data[deger].spells[0].costBurn} </Text>
+                                            
+                                        </View>
+                                        <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                        
+                                        <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('100%')}}>
+                                            <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/spell/${data[deger].spells[1].id}.png`}} ></Image>
+                                            <View style={styles.skills}>
+                                            <Text style={styles.specsText}> W </Text>
+                                            <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[1].name} </Text>
+                                            </View>
+                                            
+                                            <View style={[styles.skills],{width:wp('30%')}}>
+                                            <Text style={styles.specsText}>Bekleme Süresi</Text>
+                                            <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[1].cooldownBurn} </Text>
+                                            </View>
+                                            <View style={styles.skills}>
+                                            <Text style={styles.specsText}>Menzil</Text>
+                                            <Text  style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[1].rangeBurn} </Text>
+                                            </View>
+                                            
+                                            
+                                            
+                                        </View>
+                                        <Text style={styles.specsText}> {data[deger].spells[1].description} </Text>
+                                        <Text style={styles.specsText}> Mana Bedeli : {data[deger].spells[1].costBurn} </Text>
+                                        
+                                    </View>
+                                    <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                        
+                                        <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('100%')}}>
+                                            <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/spell/${data[deger].spells[2].id}.png`}} ></Image>
+                                            <View style={styles.skills}>
+                                            <Text style={styles.specsText}> E </Text>
+                                            <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[2].name} </Text>
+                                            </View>
+                                            
+                                            <View style={[styles.skills],{width:wp('30%')}}>
+                                            <Text style={styles.specsText}>Bekleme Süresi</Text>
+                                            <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[2].cooldownBurn} </Text>
+                                            </View>
+                                            <View style={styles.skills}>
+                                            <Text style={styles.specsText}>Menzil</Text>
+                                            <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[2].rangeBurn} </Text>
+                                            </View>
+                                            
+                                            
+                                            
+                                        </View>
+                                        <Text style={styles.specsText}> {data[deger].spells[2].description} </Text>
+                                        <Text style={styles.specsText}> Mana Bedeli : {data[deger].spells[2].costBurn} </Text>
+                                        
+                                    </View>
+                                    <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                        
+                                        <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('100%')}}>
+                                            <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/spell/${data[deger].spells[3].id}.png`}} ></Image>
+                                            <View style={styles.skills}>
+                                            <Text style={styles.specsText}> R </Text>
+                                            <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[3].name} </Text>
+                                            </View>
+                                            
+                                            <View style={[styles.skills],{width:wp('30%')}}>
+                                            <Text style={styles.specsText}>Bekleme Süresi</Text>
+                                            <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[3].cooldownBurn} </Text>
+                                            </View>
+                                            <View style={styles.skills}>
+                                            <Text style={styles.specsText}>Menzil</Text>
+                                            <Text style={[styles.specsText,{textAlign:'auto'}]}> {data[deger].spells[3].rangeBurn} </Text>
+                                            </View>
+                                            
+                                            
+                                            
+                                        </View>
+                                        <Text style={styles.specsText}> {data[deger].spells[3].description} </Text>
+                                        <Text style={styles.specsText}> Mana Bedeli : {data[deger].spells[3].costBurn} </Text>
+                                        
+                                    </View>
+                            </ScrollView>
+                            
                                 
                         </Swiper>
                         
@@ -191,7 +448,8 @@ export default function Detail  ({route,navigation})  {
             </SafeAreaView>
         )
     
-    }   
+    } 
+  
     
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -201,6 +459,7 @@ export default function Detail  ({route,navigation})  {
     
 
 }
+
 
 const styles=StyleSheet.create({
     container:{
@@ -222,9 +481,31 @@ const styles=StyleSheet.create({
         
         marginHorizontal:'2%',
         marginVertical:'2%',
-        alignItems:'center',justifyContent:'space-around'
+        alignItems:'center',justifyContent:'center',
+        padding:wp('3%'),
+       
         
         
     },
-    wrapper:{}
+    wrapper:{},
+    specs :{
+        flexDirection:'column',alignItems:'center'
+    },
+    specsText:{
+        color:'white',
+        fontSize:hp('2%'),
+        fontWeight:'bold',
+        marginBottom:hp('1.5%'),
+        textAlign:'justify',
+        marginVertical:hp('1%')
+       
+        
+    },
+    stats:{
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },skills
+    :{
+        flexDirection:'column',width:wp('25%')
+    }
 })
