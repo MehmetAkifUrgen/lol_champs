@@ -193,9 +193,6 @@ export default function App() {
       };
 
 
-      if(data.length != 0 ){
-       
-      }
      
     
       return (
@@ -210,7 +207,7 @@ export default function App() {
           <View style={styles.header}> 
               
             <Animated.Image resizeMode="stretch" style={{opacity:opaAnimated, width:'100%',height:'100%',borderBottomLeftRadius:wp('15%'),borderBottomRightRadius:wp('15%'),
-          backgroundColor: 'transparent'}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${Object.values(data).length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * 156)]["id"] }_0.jpg`}} ></Animated.Image>
+          backgroundColor: 'transparent'}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${Object.values(data).length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * Object.values(data).length)]["id"] }_0.jpg`}} ></Animated.Image>
           </View>
           <View style={{marginTop:'3%',
         marginHorizontal:'20%',
@@ -234,6 +231,7 @@ export default function App() {
     
                     //ListHeaderComponent={renderHeader}
                   data={Object.values(data)}
+                  initialNumToRender={7}
                     renderItem={renderItem}
                   refreshing={true}
                   keyExtractor={item=>item.key}
@@ -255,7 +253,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(52, 52, 52, 0.8)',
-   
+    position:'relative'
   },
   header:{
     
@@ -293,11 +291,12 @@ const styles = StyleSheet.create({
     
     alignItems:'center',
     marginBottom:'2%',
-    
+    justifyContent:'center'
   },
   text:{
     fontSize:15,
     fontWeight:'bold',
-    color:'white'
+    color:'white',
+    textAlign:'center'
   }
 });
