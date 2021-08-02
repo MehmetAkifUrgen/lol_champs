@@ -287,7 +287,7 @@ export default function Detail  ({route,navigation})  {
                             <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
                             <ImageBackground 
                                     style={{width:'100%',height:'100%',position:'absolute',opacity:0.3}} 
-                                    resizeMode="stretch"
+                                    resizeMode="cover"
                                     source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${skin[skin.length-2]}.jpg`}}
 
                                 >
@@ -304,13 +304,14 @@ export default function Detail  ({route,navigation})  {
                                     chartConfig={{
 
                                         
-                                        backgroundGradientToOpacity:0.5,
+                                        backgroundGradientToOpacity:.5,
                                         backgroundGradientFrom: "#251298",
                                         backgroundGradientTo: "#981225",
-                                        backgroundGradientFromOpacity: 0,
+                                        backgroundGradientFromOpacity: .1,
+                                        fillShadowGradientOpacity:.7,
                                                                             
-                                         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                         color: (opacity = .1) => `rgba(255, 255, 255, ${opacity})`,
+                                         labelColor: (opacity = .1) => `rgba(255, 255, 255, ${opacity})`,
                                        
                                         
                                     }}
@@ -321,7 +322,7 @@ export default function Detail  ({route,navigation})  {
                             <ScrollView style={{flex:1}}>
                             <ImageBackground 
                                     style={{width:'100%',height:'100%',position:'absolute',opacity:0.3}} 
-                                    resizeMode="stretch"
+                                    resizeMode="cover"
                                     source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${skin[skin.length-3]}.jpg`}}
 
                                 >

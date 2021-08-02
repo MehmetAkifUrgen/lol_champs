@@ -8,6 +8,7 @@ import LottieView from 'lottie-react-native';
 import { Animated, Easing } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { LinearGradient } from 'expo-linear-gradient';
+import Swiper from 'react-native-swiper';
 
 export default function App() {
 
@@ -131,7 +132,17 @@ export default function App() {
     // console.log("*****",Object.values(data).length )
     // console.log('--------',version[0])
     
-
+    const costum = Object.values(data).map((value,index) => {
+      
+      return(
+          <View style={{flexDirection:'row',flex:1}} key={index}>
+                <Animated.Image resizeMode="stretch" style={{opacity:opaAnimated, width:'100%',height:'100%',borderBottomLeftRadius:wp('15%'),borderBottomRightRadius:wp('15%'),
+                 backgroundColor: 'transparent'}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${value.length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * Object.values(data).length)]["id"] }_0.jpg`}} ></Animated.Image>
+          </View>
+          
+          
+      )
+});
 
    const gonder = ( champ,image )=>{
     
@@ -206,8 +217,9 @@ export default function App() {
                 }} source={require('./assets/ground.jpg')}></ImageBackground> */}
           <View style={styles.header}> 
               
-            <Animated.Image resizeMode="stretch" style={{opacity:opaAnimated, width:'100%',height:'100%',borderBottomLeftRadius:wp('15%'),borderBottomRightRadius:wp('15%'),
-          backgroundColor: 'transparent'}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${Object.values(data).length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * Object.values(data).length)]["id"] }_0.jpg`}} ></Animated.Image>
+           <Swiper showsPagination={false} showsButtons={false}  autoplay={true}>
+             {costum}
+           </Swiper>
           </View>
           <View style={{marginTop:'3%',
         marginHorizontal:'20%',
