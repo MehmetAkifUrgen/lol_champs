@@ -18,6 +18,13 @@ import {
   } from "react-native-chart-kit";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { version } from 'react/cjs/react.development';
+import {
+    AdMobBanner,
+    AdMobInterstitial,
+    PublisherBanner,
+    AdMobRewarded,
+    setTestDeviceIDAsync,
+  } from 'expo-ads-admob';
 
 
 export default function Detail  ({route,navigation})  {
@@ -33,7 +40,7 @@ export default function Detail  ({route,navigation})  {
     const [error, setError] = useState(null);
     const [control, setControl] = useState(null);
     const [skin,setSkin]=useState([])
-    const headAnimated= new Animated.Value(150)
+    const headAnimated= new Animated.Value(.2)
  
     const [kostum,setKostum] = useState(false)
     const [versions,setVersions] = useState("")
@@ -66,25 +73,39 @@ export default function Detail  ({route,navigation})  {
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
         
       }
+    async function  odul () {
+        await AdMobRewarded.setAdUnitID('ca-app-pub-7956816566156883/9819910150'); // Test ID, Replace with your-admob-unit-id
+        await AdMobRewarded.requestAdAsync();
+        await AdMobRewarded.showAdAsync();
+    } 
       async function normalYap() {
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
        
       }
+      gecis = async ()=> {
+        await AdMobInterstitial.setAdUnitID('ca-app-pub-7956816566156883/1548676078'); // Test ID, Replace with your-admob-unit-id
+        await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
+        await AdMobInterstitial.showAdAsync(); 
+    }
 
     const headAnimations = () => {
         Animated.timing(headAnimated,{
-          toValue:0,
-          duration:2000,
+          toValue:1,
+          duration:9000,
           useNativeDriver:false,
-          easing:Easing.elastic(20)
+          easing:Easing.back(2)
         }).start()
+        
     };
     
         
-
+        
+       
         useEffect(() => {
+            
             setIsLoading(true);
             getChampionsDetail();
+            gecis();
             
             
             
@@ -136,7 +157,10 @@ export default function Detail  ({route,navigation})  {
 
        
     if(kostum){
+        odul();
         changeScreenOrientation();
+        
+        
 
         const costum = data[deger].skins.map((value,index) => {
             skin.push(value.num)
@@ -151,7 +175,7 @@ export default function Detail  ({route,navigation})  {
                 }}  key={index}>
                     <Image 
                     style={{width:'100%',height:'100%',position:'absolute'}}    
-                    resizeMode="stretch" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${value.num}.jpg`}}>
+                    resizeMode="cover" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${value.num}.jpg`}}>
 
                     </Image>
                    <TouchableOpacity onPress={()=> setKostum(false)} style={{flex:1,position:'relative',alignItems:'flex-start',justifyContent:'flex-start',zIndex:2,margin:wp('4%')}}>
@@ -223,7 +247,7 @@ export default function Detail  ({route,navigation})  {
                     <View style={styles.header}>
                     <Animated.Image 
                     style={{width:'100%',height:'100%', position:'absolute',
-                borderBottomLeftRadius:wp('3%'),borderBottomRightRadius:wp('3%'), right:headAnimated }}    
+                borderBottomLeftRadius:wp('3%'),borderBottomRightRadius:wp('3%'), transform:[{scale:headAnimated}] }}    
                     resizeMode="stretch" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_0.jpg`}}>
 
                     </Animated.Image>
@@ -330,12 +354,12 @@ export default function Detail  ({route,navigation})  {
                                 </ImageBackground>
                                         <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
                                         
-                                            <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('100%'),alignItems:'center'}}>
+                                            <View style={{flexDirection:'row',width:wp('100%'),alignItems:'center'}}>
                                                
                                                 <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/passive/${data[deger].passive.image.full}`}} ></Image>
                                                 <Text style={[styles.specsText,{width:wp('25%')}]}> Pasif </Text>
                                                 <Text style={[styles.specsText,{width:wp('25%'),textAlign:'auto'}]}> {data[deger].passive.name} </Text>
-                                                <Text style={[styles.specsText,{width:wp('25%'),textAlign:'auto',color:'tomato'}]}> {data[deger].name} </Text>
+                                                <Text style={{width:wp('25%'),fontSize:hp('1.5%'),fontWeight:'bold',color:'tomato',textAlign:'center'}}> {data[deger].name} </Text>
                                                 
                                             </View>
                                             <Text style={styles.specsText}> {data[deger].passive.description} </Text>

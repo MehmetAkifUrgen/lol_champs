@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View ,ActivityIndicator, TextInput,Image, FlatList,TouchableOpacity, Alert} from 'react-native';
+import { StyleSheet, Text, View ,ActivityIndicator, TextInput,Image, FlatList,TouchableOpacity, Alert, ImageBackground} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { filter } from 'lodash';
@@ -9,6 +9,13 @@ import { Animated, Easing } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { LinearGradient } from 'expo-linear-gradient';
 import Swiper from 'react-native-swiper';
+import {
+  AdMobBanner,
+  AdMobInterstitial,
+  PublisherBanner,
+  AdMobRewarded,
+  setTestDeviceIDAsync,
+} from 'expo-ads-admob';
 
 export default function App() {
 
@@ -171,7 +178,7 @@ export default function App() {
     return(
       
             <TouchableOpacity onPress={()=>gonder(item.id,item.image.full)} style={styles.hero}>
-          <Animated.Image  resizeMode="stretch" style={{width:wp('20%'),height:hp('10%'),transform:[{rotate:startInterpolate}],borderRadius:wp('5%')}} source={{uri:icon+""+item.image.full}} >
+          <Animated.Image  resizeMode="stretch" style={{width:wp('30%'),height:hp('18%'),transform:[{rotate:startInterpolate}],borderRadius:wp('5%')}} source={{uri:icon+""+item.image.full}} >
             </Animated.Image>   
             <Text style={styles.text} > {item.name} </Text>
         </TouchableOpacity>
@@ -209,12 +216,13 @@ export default function App() {
       return (
     
         <View style={styles.container}>
-          {/* <ImageBackground style={{
+          
+          <ImageBackground style={{
                     width:'100%',
                     height: '100%',
                     resizeMode: 'cover',
                     position:'absolute'
-                }} source={require('./assets/ground.jpg')}></ImageBackground> */}
+                }} source={require('../../assets/splash.png')}></ImageBackground> 
           <View style={styles.header}> 
               
            <Swiper showsPagination={false} showsButtons={false}  autoplay={true}>
@@ -232,14 +240,14 @@ export default function App() {
             
                 value={query}
                 onChangeText={queryText => handleSearch(queryText)}
-                placeholder="Search"
+                placeholder="Ara"
                 style={{ backgroundColor: '#fff', paddingHorizontal: 20,borderRadius:10 }}
             
           />
           </View>
           
           <FlatList
-                    contentContainerStyle={{flexGrow:1,}}
+                    contentContainerStyle={{}}
     
                     //ListHeaderComponent={renderHeader}
                   data={Object.values(data)}
@@ -247,11 +255,18 @@ export default function App() {
                     renderItem={renderItem}
                   refreshing={true}
                   keyExtractor={item=>item.key}
-                  numColumns={4}
+                  numColumns={3}
                   horizontal={false}
                 
                 />
+                <AdMobBanner
+                  bannerSize="fullBanner"
+                  adUnitID="ca-app-pub-7956816566156883/9970091576" // Test ID, Replace with your-admob-unit-id
+                  servePersonalizedAds // true or false
+                   />
 
+        
+         
           <StatusBar hidden={true} style="auto" />
         </View>
       );
@@ -264,8 +279,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(52, 52, 52, 0.8)',
-    position:'relative'
+    backgroundColor: 'white',
+    
   },
   header:{
     
@@ -300,13 +315,13 @@ const styles = StyleSheet.create({
     
     flex:1,  
     marginHorizontal:'0.6%',
-    
     alignItems:'center',
     marginBottom:'2%',
-    justifyContent:'center'
+    justifyContent:'center',
+    
   },
   text:{
-    fontSize:15,
+    fontSize:hp('2.15%'),
     fontWeight:'bold',
     color:'white',
     textAlign:'center'

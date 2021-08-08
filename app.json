@@ -24,7 +24,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.urgenakif.lol_heros"
+      "package": "com.urgenakif.lol_heros",
+      "config": {
+        
+        "googleMobileAdsAppId": "ca-app-pub-7956816566156883~3951478134"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
