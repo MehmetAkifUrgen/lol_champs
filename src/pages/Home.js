@@ -143,7 +143,7 @@ export default function App() {
       
       return(
           <View style={{flexDirection:'row',flex:1}} key={index}>
-                <Animated.Image resizeMode="stretch" style={{opacity:opaAnimated, width:'100%',height:'100%',borderBottomLeftRadius:wp('15%'),borderBottomRightRadius:wp('15%'),
+                <Animated.Image resizeMode="stretch" style={{ width:'100%',height:'100%',borderBottomLeftRadius:wp('15%'),borderBottomRightRadius:wp('15%'),
                  backgroundColor: 'transparent'}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${value.length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * Object.values(data).length)]["id"] }_0.jpg`}} ></Animated.Image>
           </View>
           
@@ -225,7 +225,7 @@ export default function App() {
                 }} source={require('../../assets/splash.png')}></ImageBackground> 
           <View style={styles.header}> 
               
-           <Swiper showsPagination={false} showsButtons={false}  autoplay={true}>
+           <Swiper autoplayTimeout={5} showsPagination={false} showsButtons={false}  autoplay={true}>
              {costum}
            </Swiper>
           </View>

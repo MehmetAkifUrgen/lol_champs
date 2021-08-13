@@ -40,7 +40,7 @@ export default function Detail  ({route,navigation})  {
     const [error, setError] = useState(null);
     const [control, setControl] = useState(null);
     const [skin,setSkin]=useState([])
-    const headAnimated= new Animated.Value(.2)
+    const headAnimated= new Animated.Value(.7)
  
     const [kostum,setKostum] = useState(false)
     const [versions,setVersions] = useState("")
@@ -91,9 +91,9 @@ export default function Detail  ({route,navigation})  {
     const headAnimations = () => {
         Animated.timing(headAnimated,{
           toValue:1,
-          duration:9000,
+          duration:8000,
           useNativeDriver:false,
-          easing:Easing.back(2)
+          
         }).start()
         
     };
