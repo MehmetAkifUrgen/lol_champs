@@ -9,6 +9,7 @@ import { Animated, Easing } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { LinearGradient } from 'expo-linear-gradient';
 import Swiper from 'react-native-swiper';
+import remoteConfig from '@react-native-firebase/remote-config';
 import {
   AdMobBanner,
   AdMobInterstitial,
@@ -18,6 +19,21 @@ import {
 } from 'expo-ads-admob';
 
 export default function App() {
+  remoteConfig()
+  .setDefaults({
+    awesome_new_feature: 'disabled',
+  })
+  .then(() => remoteConfig().fetchAndActivate())
+  .then(fetchedRemotely => {
+    if (fetchedRemotely) {
+      console.log('Configs were retrieved from the backend and activated.');
+    } else {
+      console.log(
+        'No configs were fetched from the backend, and the local configs were already activated',
+      );
+    }
+  });
+  
 
   const navigation = useNavigation();
   const veri="http://ddragon.leagueoflegends.com/cdn/11.9.1/data/tr_TR/champion.json";
@@ -231,7 +247,7 @@ export default function App() {
           </View>
           <View style={{marginTop:'3%',
         marginHorizontal:'20%',
-        marginBottom:'3%'}}>
+        marginBottom:'4%'}}>
           <TextInput
     
                 // onChangeText={(text)=>{                   

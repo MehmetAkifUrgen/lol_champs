@@ -1833,6 +1833,11 @@
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
+"@react-native-firebase/remote-config@^12.6.0":
+  version "12.6.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-12.6.0.tgz#b4721202cecef45a59e2d6a72820882b5ef66f23"
+  integrity sha512-vOizDZxmteYAHRnF25bCu+DqYWmpkn6pedPwK4JeFJU2CILeL5RUS0kRsrSVgIpcZSZ9f6yPFc6AMkLaiCCh0w==
+
 "@react-navigation/core@^5.15.3":
   version "5.15.3"
   resolved "https://registry.npmjs.org/@react-navigation/core/-/core-5.15.3.tgz"
