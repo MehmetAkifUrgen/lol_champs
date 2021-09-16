@@ -9,7 +9,7 @@ import { Animated, Easing } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { LinearGradient } from 'expo-linear-gradient';
 import Swiper from 'react-native-swiper';
-import remoteConfig from '@react-native-firebase/remote-config';
+
 import {
   AdMobBanner,
   AdMobInterstitial,
@@ -19,20 +19,7 @@ import {
 } from 'expo-ads-admob';
 
 export default function App() {
-  remoteConfig()
-  .setDefaults({
-    awesome_new_feature: 'disabled',
-  })
-  .then(() => remoteConfig().fetchAndActivate())
-  .then(fetchedRemotely => {
-    if (fetchedRemotely) {
-      console.log('Configs were retrieved from the backend and activated.');
-    } else {
-      console.log(
-        'No configs were fetched from the backend, and the local configs were already activated',
-      );
-    }
-  });
+  
   
 
   const navigation = useNavigation();
