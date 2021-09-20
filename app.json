@@ -35,11 +35,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "androidNavigationBar": {
-      "visible":"immersive"
-     
     }
+    
    
     
   }

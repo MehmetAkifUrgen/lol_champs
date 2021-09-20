@@ -1,6 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
+
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View ,ActivityIndicator, TextInput,Image, FlatList,TouchableOpacity, Alert, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View ,ActivityIndicator, TextInput,StatusBar, FlatList,TouchableOpacity, SafeAreaView, ImageBackground,Platform,KeyboardAvoidingView} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { filter } from 'lodash';
@@ -9,22 +9,21 @@ import { Animated, Easing } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { LinearGradient } from 'expo-linear-gradient';
 import Swiper from 'react-native-swiper';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { Icon } from 'react-native-elements';
 
-import {
-  AdMobBanner,
-  AdMobInterstitial,
-  PublisherBanner,
-  AdMobRewarded,
-  setTestDeviceIDAsync,
-} from 'expo-ads-admob';
+
 
 export default function App() {
   
+  let [fontsLoaded] = useFonts({
+    'josefin': require('../../assets/JosefinSans-Medium.ttf'),
+  });
   
 
   const navigation = useNavigation();
-  const veri="http://ddragon.leagueoflegends.com/cdn/11.9.1/data/tr_TR/champion.json";
-  const icon ="http://ddragon.leagueoflegends.com/cdn/11.9.1/img/champion/";
   const [data,setData]=useState([])
   const [newData,setnewData]=useState([])
   const [error, setError] = useState(null);
@@ -36,7 +35,7 @@ export default function App() {
   const opaAnimated=new Animated.Value(1)
   const [control,setControl]=useState(false)
   const [randoma,setRandom]=useState([])
-
+  const icon =`http://ddragon.leagueoflegends.com/cdn/${version[0]}/img/champion/`
 
  
   const getVersion = () => {
@@ -55,7 +54,7 @@ export default function App() {
         }).then((response)=>response.json()).then((json)=>{setData(json.data); setnewData(json.data), setIsLoading(false) ,setControl(true) })
         .catch((err)=> {setIsLoading(false),
         setError(err)} );
-        
+       
     };
    
     
@@ -99,6 +98,7 @@ export default function App() {
      }
 
     useEffect(() => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
       getVersion();
       setIsLoading(true);
 
@@ -116,6 +116,12 @@ export default function App() {
       opaAnimations();
 
     })
+    useEffect(() => {
+      if(query==""){
+        handleSearch(query);
+      }
+      
+    },[query])
 
    
     if (isLoading) {
@@ -181,9 +187,9 @@ export default function App() {
     return(
       
             <TouchableOpacity onPress={()=>gonder(item.id,item.image.full)} style={styles.hero}>
-          <Animated.Image  resizeMode="stretch" style={{width:wp('30%'),height:hp('18%'),transform:[{rotate:startInterpolate}],borderRadius:wp('5%')}} source={{uri:icon+""+item.image.full}} >
+          <Animated.Image  resizeMode="stretch" style={{width:wp('25%'),height:hp('18%'),transform:[{rotate:startInterpolate}],borderRadius:wp('5%')}} source={{uri:icon+""+item.image.full}} >
             </Animated.Image>   
-            <Text style={styles.text} > {item.name} </Text>
+            <Text maxFontSizeMultiplier={1} numberOfLines={1} style={[{fontFamily:'josefin'},styles.text]} > {item.name} </Text>
         </TouchableOpacity>
 
       )
@@ -214,43 +220,41 @@ export default function App() {
       };
 
 
-     
-    
+      if (!fontsLoaded) {
+        return <AppLoading />
+      } 
+      else{
       return (
     
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
           
-          <ImageBackground style={{
-                    width:'100%',
-                    height: '100%',
-                    resizeMode: 'cover',
-                    position:'absolute'
-                }} source={require('../../assets/splash.png')}></ImageBackground> 
+          <ImageBackground style={styles.image_background} source={require('../../assets/splash.png')}></ImageBackground> 
           <View style={styles.header}> 
               
            <Swiper autoplayTimeout={5} showsPagination={false} showsButtons={false}  autoplay={true}>
              {costum}
            </Swiper>
           </View>
-          <View style={{marginTop:'3%',
-        marginHorizontal:'20%',
-        marginBottom:'4%'}}>
+          <KeyboardAvoidingView
+             behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.text_Input_Viewport}>
           <TextInput
     
                 // onChangeText={(text)=>{                   
                 //     searchFilter(text)     
                 // }}
-            
+                
                 value={query}
                 onChangeText={queryText => handleSearch(queryText)}
                 placeholder="Ara"
-                style={{ backgroundColor: '#fff', paddingHorizontal: 20,borderRadius:10 }}
+                style={[styles.text_Input,{fontFamily:'josefin'}]}
             
           />
-          </View>
+          <Icon style={styles.icon} onPress={() => setQuery('')} name="times" type="font-awesome"></Icon>
+          </KeyboardAvoidingView>
           
           <FlatList
-                    contentContainerStyle={{}}
+                    contentContainerStyle={styles.flat_list}
     
                     //ListHeaderComponent={renderHeader}
                   data={Object.values(data)}
@@ -262,17 +266,14 @@ export default function App() {
                   horizontal={false}
                 
                 />
-                <AdMobBanner
+                {/* <AdMobBanner
                   bannerSize="fullBanner"
                   adUnitID="ca-app-pub-7956816566156883/9970091576" // Test ID, Replace with your-admob-unit-id
                   servePersonalizedAds // true or false
-                   />
-
-        
-         
-          <StatusBar hidden={true} style="auto" />
-        </View>
+                   /> */}
+        </SafeAreaView>
       );
+      }
      }
   
    
@@ -283,27 +284,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    
+   
   },
-  header:{
-    
+  header:{  
     height:'20%',
     width:'100%'  ,
-    
-    
-   
   },
   headerText:{
     color:'black',
     fontSize:20
-  },
-  body:{
-    
-    flex:20,
-    alignItems:'center',
-    
-   
-
   },
   input: {
     padding:4,
@@ -316,17 +305,46 @@ const styles = StyleSheet.create({
   },
   hero:{
     
-    flex:1,  
+    width:wp('30%'),
+    height:hp('25%'),
     marginHorizontal:'0.6%',
     alignItems:'center',
     marginBottom:'2%',
     justifyContent:'center',
-    
+   
   },
   text:{
-    fontSize:hp('2.15%'),
-    fontWeight:'bold',
+    fontSize:hp('2%'),
     color:'white',
-    textAlign:'center'
+    textAlign:'center',
+    width:wp('30%'),
+  },
+  flat_list:{
+    justifyContent:'center',
+    alignItems: 'center'
+  },
+  text_Input:{
+    backgroundColor: '#fff',
+    width:wp('30%')
+  },
+  text_Input_Viewport:{
+      marginTop:hp('3.6%'),
+        marginHorizontal:'20%',
+        marginBottom:'4%',
+        backgroundColor: 'white',
+        flexDirection:'row',
+        alignItems: 'center',
+        justifyContent:'space-between',
+        padding:wp('1.5%'),
+        borderRadius:wp('1%')
+  },
+  image_background:{
+    width:'100%',
+    height: '100%',
+    resizeMode: 'cover',
+    position:'absolute'
+  },
+  icon:{
+    width:wp('5%')
   }
 });
