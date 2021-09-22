@@ -1,6 +1,6 @@
 
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View ,ActivityIndicator, TextInput,StatusBar, FlatList,TouchableOpacity, SafeAreaView, ImageBackground,Platform,KeyboardAvoidingView} from 'react-native';
+import { StyleSheet, Text, View ,ActivityIndicator, TextInput,Image, FlatList,TouchableOpacity, SafeAreaView, ImageBackground,Platform,KeyboardAvoidingView} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { filter } from 'lodash';
@@ -13,6 +13,8 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Icon } from 'react-native-elements';
+import {Menu,Button,Provider } from 'react-native-paper';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 
 
@@ -34,9 +36,24 @@ export default function App() {
   const [version,setVersion] = useState([]);
   const opaAnimated=new Animated.Value(1)
   const [control,setControl]=useState(false)
-  const [randoma,setRandom]=useState([])
   const icon =`http://ddragon.leagueoflegends.com/cdn/${version[0]}/img/champion/`
+  const [visible, setVisible] = useState(false);
+  const [language, setLanguage] = useState('en_US');
+  const { getItem, setItem } = useAsyncStorage('language');
 
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
+  
+  const readItemFromStorage = async () => {
+    const item = await getItem();
+    setLanguage(item);
+  };
+
+  const writeItemToStorage = async newValue => {
+    await setItem(newValue);
+    setValue(newValue);
+  };
  
   const getVersion = () => {
     fetch("https://ddragon.leagueoflegends.com/api/versions.json", {
@@ -49,7 +66,7 @@ export default function App() {
   
 
   const getChampionsName = () => {
-    fetch(`http://ddragon.leagueoflegends.com/cdn/${version[0]}/data/tr_TR/champion.json`, {
+    fetch(`http://ddragon.leagueoflegends.com/cdn/${version[0]}/data/en_US/champion.json`, {
     method: 'GET',
         }).then((response)=>response.json()).then((json)=>{setData(json.data); setnewData(json.data), setIsLoading(false) ,setControl(true) })
         .catch((err)=> {setIsLoading(false),
@@ -96,6 +113,10 @@ export default function App() {
          rotate:startInterpolate
        }]
      }
+    
+     useEffect(() => {
+      readItemFromStorage();
+    }, []);
 
     useEffect(() => {
       ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
@@ -114,14 +135,10 @@ export default function App() {
     useEffect(() => {
       startAnimations();
       opaAnimations();
-
-    })
-    useEffect(() => {
-      if(query==""){
-        handleSearch(query);
-      }
       
-    },[query])
+    })
+   
+    
 
    
     if (isLoading) {
@@ -151,9 +168,9 @@ export default function App() {
     const costum = Object.values(data).map((value,index) => {
       
       return(
-          <View style={{flexDirection:'row',flex:1}} key={index}>
+          <View style={{flexDirection:'row',width:'100%',height:'100%'}} key={index}>
                 <Animated.Image resizeMode="stretch" style={{ width:'100%',height:'100%',borderBottomLeftRadius:wp('15%'),borderBottomRightRadius:wp('15%'),
-                 backgroundColor: 'transparent'}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${value.length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * Object.values(data).length)]["id"] }_0.jpg`}} ></Animated.Image>
+                 backgroundColor: 'transparent',position:'absolute'}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${value.length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * Object.values(data).length)]["id"] }_0.jpg`}} ></Animated.Image>
           </View>
           
           
@@ -173,6 +190,10 @@ export default function App() {
      // console.log("TOKEN ==>>", version[0])
 
     });
+    AsyncStorage.setItem('language', language).then(() => {
+      // console.log("TOKEN ==>>", version[0])
+ 
+     });
     navigation.navigate('Detail',{champ})
    
    }
@@ -187,7 +208,7 @@ export default function App() {
     return(
       
             <TouchableOpacity onPress={()=>gonder(item.id,item.image.full)} style={styles.hero}>
-          <Animated.Image  resizeMode="stretch" style={{width:wp('25%'),height:hp('18%'),transform:[{rotate:startInterpolate}],borderRadius:wp('5%')}} source={{uri:icon+""+item.image.full}} >
+          <Animated.Image  resizeMode="stretch" style={{width:wp('25%'),height:hp('18%'),transform:[{rotate:startInterpolate}],borderRadius:wp('8%')}} source={{uri:icon+""+item.image.full}} >
             </Animated.Image>   
             <Text maxFontSizeMultiplier={1} numberOfLines={1} style={[{fontFamily:'josefin'},styles.text]} > {item.name} </Text>
         </TouchableOpacity>
@@ -200,24 +221,24 @@ export default function App() {
         
         
     //   };
-     const handleSearch = (text) => {
-        const formattedQuery = text.toLowerCase();
-        const filteredData = filter(Object.values(newData), hero => {
-          return contains(hero, formattedQuery);
-        });
-        setData(filteredData);
-        setQuery(text);
-      };
+    const handleSearch = (text) => {
+      const formattedQuery = text.toLowerCase();
+      const filteredData = filter(Object.values(newData), hero => {
+        return contains(hero, formattedQuery);
+      });
+      setData(filteredData);
+      setQuery(text);
+    };
+    
+    const contains = ({id,name}, query) => {
       
-      const contains = ({id,name}, query) => {
-        
-      
-        if (id.toLowerCase().includes(query)){
-          return true;
-        }
-      
-        return false;
-      };
+    
+      if (id.toLowerCase().includes(query)){
+        return true;
+      }
+    
+      return false;
+    };
 
 
       if (!fontsLoaded) {
@@ -225,24 +246,33 @@ export default function App() {
       } 
       else{
       return (
-    
+        <Provider>
         <SafeAreaView style={styles.container}>
           
           <ImageBackground style={styles.image_background} source={require('../../assets/splash.png')}></ImageBackground> 
           <View style={styles.header}> 
-              
-           <Swiper autoplayTimeout={5} showsPagination={false} showsButtons={false}  autoplay={true}>
+          
+           <Swiper   autoplayTimeout={5} showsPagination={false} showsButtons={false}  autoplay={true}>
              {costum}
            </Swiper>
+           <Menu
+           style={{alignItems:'flex-end',justifyContent:'flex-end',left: wp('70%'),}}
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={<Icon underlayColor="transparent" onPress={openMenu} style={{  top: 0, left: wp('90%'), right: 0, width: wp('7%'),zIndex:1}} size={wp('7%')} color="white" name="language"></Icon>}>
+          <Menu.Item onPress={() => {setLanguage('en_US'),setVisible(false)}} title="English" />
+          <Menu.Item onPress={() => {setLanguage("de_DE"),setVisible(false)}} title="German" />
+          <Menu.Item onPress={() => {setLanguage('es_ES'),setVisible(false)}} title="Spanish" />
+          <Menu.Item onPress={() => {setLanguage('fr_FR'),setVisible(false)}} title="French" />
+          <Menu.Item onPress={() => {setLanguage('tr_TR'),setVisible(false)}} title="Turkish" />
+          <Menu.Item onPress={() => {setLanguage('it_IT'),setVisible(false)}} title="Italian" />
+        </Menu>
           </View>
+         
           <KeyboardAvoidingView
              behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.text_Input_Viewport}>
           <TextInput
-    
-                // onChangeText={(text)=>{                   
-                //     searchFilter(text)     
-                // }}
                 
                 value={query}
                 onChangeText={queryText => handleSearch(queryText)}
@@ -250,28 +280,23 @@ export default function App() {
                 style={[styles.text_Input,{fontFamily:'josefin'}]}
             
           />
-          <Icon style={styles.icon} onPress={() => setQuery('')} name="times" type="font-awesome"></Icon>
+          <Icon style={styles.icon} onPress={() => {setQuery(""),setData(newData) }} name="times" type="font-awesome"></Icon>
           </KeyboardAvoidingView>
           
+         
+          
           <FlatList
-                    contentContainerStyle={styles.flat_list}
-    
-                    //ListHeaderComponent={renderHeader}
+                  contentContainerStyle={styles.flat_list}
                   data={Object.values(data)}
-                  initialNumToRender={7}
-                    renderItem={renderItem}
+                  renderItem={renderItem}
                   refreshing={true}
                   keyExtractor={item=>item.key}
                   numColumns={3}
                   horizontal={false}
-                
+                  initialNumToRender={7}
                 />
-                {/* <AdMobBanner
-                  bannerSize="fullBanner"
-                  adUnitID="ca-app-pub-7956816566156883/9970091576" // Test ID, Replace with your-admob-unit-id
-                  servePersonalizedAds // true or false
-                   /> */}
         </SafeAreaView>
+       </Provider>
       );
       }
      }
@@ -287,7 +312,7 @@ const styles = StyleSheet.create({
    
   },
   header:{  
-    height:'20%',
+    height:'25%',
     width:'100%'  ,
   },
   headerText:{
@@ -320,15 +345,15 @@ const styles = StyleSheet.create({
     width:wp('30%'),
   },
   flat_list:{
-    justifyContent:'center',
-    alignItems: 'center'
+    justifyContent: 'center',
+    alignItems:'center',
+    
   },
   text_Input:{
     backgroundColor: '#fff',
     width:wp('30%')
   },
   text_Input_Viewport:{
-      marginTop:hp('3.6%'),
         marginHorizontal:'20%',
         marginBottom:'4%',
         backgroundColor: 'white',

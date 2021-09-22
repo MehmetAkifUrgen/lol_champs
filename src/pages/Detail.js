@@ -31,28 +31,31 @@ export default function Detail  ({route,navigation})  {
     const [control, setControl] = useState(null);
     const [skin,setSkin]=useState([])
     const headAnimated= new Animated.Value(.7)
- 
     const [kostum,setKostum] = useState(false)
     const [versions,setVersions] = useState("")
     const getChampionsDetail = () => {
         AsyncStorage.getItem('hero',(error,value) => {
             AsyncStorage.getItem('version', (errorr,version) => {
                 setVersions(version)
-                
-                if(!error){
-                    setValue(value)
-                    if(value !== null){
-                        fetch(`http://ddragon.leagueoflegends.com/cdn/${version}/data/tr_TR/champion/${value}.json`, {
-                            method: 'GET',
-                          
-                                }).then((response)=>response.json()).then((json)=>{setData(json.data),setnewData(data[deger]),setIsLoading(false),setControl(true) })
-                                .catch((err)=> {setIsLoading(false),setError(err)}
-                                   );
+                AsyncStorage.getItem('language', (errorrr,language) => {
+                    if(!error){
+                        setValue(value)
+                        if(value !== null){
+                            fetch(`http://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/champion/${value}.json`, {
+                                method: 'GET',
+                              
+                                    }).then((response)=>response.json()).then((json)=>{setData(json.data),setnewData(data[deger]),setIsLoading(false),setControl(true) })
+                                    .catch((err)=> {setIsLoading(false),setError(err)}
+                                       );
+                                   
+                                };
                                
-                            };
-                           
-                            
-                    }
+                                
+                        }
+                })
+                
+                
+              
             })
             
             }
@@ -95,8 +98,8 @@ export default function Detail  ({route,navigation})  {
             
             setIsLoading(true);
             getChampionsDetail();
-            // gecis();
-            
+           // gecis();
+           
             
             
          },[] );
@@ -179,12 +182,12 @@ export default function Detail  ({route,navigation})  {
                 "Mage":require('../../assets/Mage.png'),"Marksman":require('../../assets/Marksman.png'),
                 "Support":require('../../assets/Support.png'),"Tank":require('../../assets/Tank.png')}
                 var index1=""
-                index=='Mage' ? index1 = 'Büyücü' : null
-                index=='Assassin' ? index1 = 'Suikastçi' : null
-                index=='Marksman' ? index1 = 'Nişancı' : null
-                index=='Support' ? index1 = 'Destek' : null
+                index=='Mage' ? index1 = 'Mage' : null
+                index=='Assassin' ? index1 = 'Assasin' : null
+                index=='Marksman' ? index1 = 'Marksman' : null
+                index=='Support' ? index1 = 'Support' : null
                 index=='Tank' ? index1 = 'Tank' : null
-                index=='Fighter' ? index1 = 'Dövüşçü' : null
+                index=='Fighter' ? index1 = 'Fighter' : null
                 return(
                     <View key={index} style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%'),marginHorizontal:wp('3%')}} >
                             <Text style={{color:'white',fontSize:hp('2%'),fontFamily:'josefin'}} > {index1} </Text>
@@ -194,7 +197,7 @@ export default function Detail  ({route,navigation})  {
                 )
         });
         const datas = {
-            labels: ["SALDIRI", "SAVUNMA", "BÜYÜ","ZORLUK"],
+            labels: ["ATTACK", "DEFENSE", "MAGIC","DIFFUCULTY"],
             datasets: [
                 {
                     data: [data[deger].info.attack*10, data[deger].info.defense*10, data[deger].info.magic*10,data[deger].info.difficulty*10]
@@ -223,17 +226,17 @@ export default function Detail  ({route,navigation})  {
 
                     </Animated.Image>
                     <Icon
-                        style={{alignItems:'flex-start',justifyContent:'flex-start',zIndex:2,marginTop:hp('4%'),marginLeft:wp('4%'),width:wp('5%')}}
+                        style={{alignItems:'flex-start',justifyContent:'flex-start',zIndex:2,marginTop:hp('4%'),marginLeft:wp('4%'),width:wp('8%')}}
                         name='arrow-circle-left'     
                         color='white'
-                        size={wp('6%')}
+                        size={wp('8%')}
                         type='font-awesome'
                         onPress={() => navigation.navigate('Home')} />
                     <TouchableOpacity onPress={()=> setKostum(true) } style={{marginRight:wp('2%')
                     ,marginBottom:hp('2%')  ,width:wp('25%') ,justifyContent:'center',alignItems: 'center',top:hp('13%'),left:wp('73%')}}>
                             <View style={{backgroundColor:'orange',borderRadius:wp('1%'),padding:wp('1%')}}>
                             <Text style={{color:'white',fontSize:hp('2%'),fontFamily:'josefin'}}>
-                            Kostümler
+                            Skins
                         </Text>
                             </View>
                         
@@ -255,25 +258,25 @@ export default function Detail  ({route,navigation})  {
                                 </ImageBackground>
                                 <View style={styles.info}>
                                         <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center'}}>
-                                        <Text style={{color:'white',fontSize:hp('2.5%'),fontFamily:'josefin',}}>{data[deger].name} </Text>
+                                        <Text style={{color:'white',fontSize:hp('2.1%'),fontFamily:'josefin',}}>{data[deger].name} </Text>
                                         <Text style={{color:'white',fontSize:hp('1.5%'),fontFamily:'josefin',}}> a.k.a  </Text>
-                                        <Text style={{color:'white',fontSize:hp('2.5%'),fontFamily:'josefin',}}>{data[deger].title} </Text>
+                                        <Text style={{color:'white',fontSize:hp('2.1%'),fontFamily:'josefin',}}>{data[deger].title} </Text>
                                         </View>
                                     
                                         <View style={{flexDirection:'row'}}>
                                         {rol}
                                         </View>
                                         <View style={{alignItems:'center',marginTop:hp('2%')}}>
-                                            <Text style={{color:'aqua' ,fontFamily:'josefin',textDecorationLine:'underline',fontSize:hp('2%')}}>Hikaye</Text>
+                                            <Text style={{color:'aqua' ,fontFamily:'josefin',textDecorationLine:'underline',fontSize:hp('2%')}}>Story</Text>
                                         <Text style={{color:'white',textAlign:'justify',fontSize:hp('2%'),marginTop:hp('2%'),fontFamily:'josefin'}}> {data[deger].lore} </Text>
                                         </View>
                                         
                                         <View style={{alignItems:'center',marginTop:hp('2%')}}>
-                                            <Text style={{color:'#7FFF00' ,fontFamily:'josefin',textDecorationLine:'underline',fontSize:hp('2%')}}>Sen Oynuyorsan</Text>
+                                            <Text style={{color:'#7FFF00' ,fontFamily:'josefin',textDecorationLine:'underline',fontSize:hp('2%')}}>If You Play</Text>
                                         <Text style={{color:'white',textAlign:'justify',fontSize:hp('2%'),marginTop:hp('2%'),fontFamily:'josefin'}}> {data[deger].allytips} </Text>
                                         </View>
                                         <View style={{alignItems:'center',marginTop:hp('2%')}}>
-                                            <Text style={{color:'orange',fontFamily:'josefin',textDecorationLine:'underline',fontSize:hp('2%')}}>Rakip Oynuyorsa</Text>
+                                            <Text style={{color:'orange',fontFamily:'josefin',textDecorationLine:'underline',fontSize:hp('2%')}}>If Againist to Play</Text>
                                         <Text style={{color:'white',textAlign:'justify',fontSize:hp('2%'),marginTop:hp('2%'),fontFamily:'josefin'}}> {data[deger].enemytips} </Text>
                                         </View>
 
@@ -325,28 +328,34 @@ export default function Detail  ({route,navigation})  {
                                 >
 
                                 </ImageBackground>
-                                        <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                        <View style={{marginTop:hp('3%'),padding:wp('2.5%')}}>
                                         
                                             <View style={{flexDirection:'row',width:wp('96%'),alignItems:'center',height:hp('15%'),justifyContent:'space-around'}}>
                                                
                                                 <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/passive/${data[deger].passive.image.full}`}} ></Image>
-                                                <Text style={[styles.specsText,{width:wp('25%'),fontFamily:'josefin'}]}> Pasif </Text>
-                                                <Text style={[styles.specsText,{width:wp('25%'),textAlign:'auto',fontFamily:'josefin'}]}> {data[deger].passive.name} </Text>
-                                                <Text style={{width:wp('25%'),fontSize:hp('2%'),fontFamily:'josefin',color:'orange',textAlign:'center'}}> {data[deger].name} </Text>
+                                                <View style={[styles.skills,{justifyContent:'center'}]}>
+                                                <Text style={[styles.specsText,{fontFamily:'josefin',color:'orange'}]}> Pasif </Text>
+                                                </View>
+                                                <View style={[styles.skills,{justifyContent:'center'}]}>
+                                                <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].passive.name} </Text>
+                                                </View>
+                                                <View style={[styles.skills,{justifyContent:'center'}]}>
+                                                <Text style={[styles.specsText,{fontFamily:'josefin',color:'orange'}]}> {data[deger].name} </Text>
+                                                </View>
                                                 
                                             </View>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}> {data[deger].passive.description} </Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].passive.description} </Text>
                                         </View>
-                                        <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                        <View style={{marginTop:hp('3%'),padding:wp('2.5%')}}>
                                         
                                             <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('96%'),alignItems:'center',height:hp('15%')}}>
                                                 <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/spell/${data[deger].spells[0].id}.png`}} ></Image>
                                                 <View style={[styles.skills]}>
-                                                <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Q </Text>
+                                                <Text style={[styles.specsText,{fontFamily:'josefin',color:'orange'}]}> Q </Text>
                                                 <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[0].name} </Text>
                                                 </View>
                                                 
-                                                <View style={[styles.skills],{width:wp('35%')}}>
+                                                <View style={[styles.skills]}>
                                                 <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Bekleme Süresi</Text>
                                                 <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[0].cooldownBurn} </Text>
                                                 </View>
@@ -358,20 +367,20 @@ export default function Detail  ({route,navigation})  {
                                                 
                                                 
                                             </View>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}> {data[deger].spells[0].description} </Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].spells[0].description} </Text>
                                             <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Bedeli : {data[deger].spells[0].costBurn} </Text>
                                             
                                         </View>
-                                        <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                        <View style={{marginTop:hp('3%'),padding:wp('2.5%')}}>
                                         
                                         <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('96%'),alignItems:'center',height:hp('15%')}}>
                                             <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/spell/${data[deger].spells[1].id}.png`}} ></Image>
                                             <View style={styles.skills}>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}> W </Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin',color:'orange'}]}> W </Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[1].name} </Text>
                                             </View>
                                             
-                                            <View style={[styles.skills],{width:wp('35%')}}>
+                                            <View style={[styles.skills]}>
                                             <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Bekleme Süresi</Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[1].cooldownBurn} </Text>
                                             </View>
@@ -383,20 +392,20 @@ export default function Detail  ({route,navigation})  {
                                             
                                             
                                         </View>
-                                        <Text style={[styles.specsText,{fontFamily:'josefin'}]}> {data[deger].spells[1].description} </Text>
+                                        <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].spells[1].description} </Text>
                                         <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Bedeli : {data[deger].spells[1].costBurn} </Text>
                                         
                                     </View>
-                                    <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                    <View style={{marginTop:hp('3%'),padding:wp('2.5%')}}>
                                         
                                         <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('96%'),alignItems:'center',height:hp('15%')}}>
                                             <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/spell/${data[deger].spells[2].id}.png`}} ></Image>
                                             <View style={styles.skills}>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}> E </Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin',color:'orange'}]}> E </Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[2].name} </Text>
                                             </View>
                                             
-                                            <View style={[styles.skills],{width:wp('35%')}}>
+                                            <View style={[styles.skills]}>
                                             <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Bekleme Süresi</Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[2].cooldownBurn} </Text>
                                             </View>
@@ -408,20 +417,20 @@ export default function Detail  ({route,navigation})  {
                                             
                                             
                                         </View>
-                                        <Text style={[styles.specsText,{fontFamily:'josefin'}]}> {data[deger].spells[2].description} </Text>
+                                        <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].spells[2].description} </Text>
                                         <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Bedeli : {data[deger].spells[2].costBurn} </Text>
                                         
                                     </View>
-                                    <View style={{marginTop:hp('3%'),padding:wp('5%')}}>
+                                    <View style={{marginTop:hp('3%'),padding:wp('2.5%')}}>
                                         
                                         <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('96%'),alignItems:'center',height:hp('15%')}}>
                                             <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/spell/${data[deger].spells[3].id}.png`}} ></Image>
                                             <View style={styles.skills}>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}> R </Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin',color:'orange'}]}> R </Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[3].name} </Text>
                                             </View>
                                             
-                                            <View style={[styles.skills],{width:wp('35%')}}>
+                                            <View style={[styles.skills]}>
                                             <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Bekleme Süresi</Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[3].cooldownBurn} </Text>
                                             </View>
@@ -433,7 +442,7 @@ export default function Detail  ({route,navigation})  {
                                             
                                             
                                         </View>
-                                        <Text style={[styles.specsText,{fontFamily:'josefin'}]}> {data[deger].spells[3].description} </Text>
+                                        <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].spells[3].description} </Text>
                                         <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Bedeli : {data[deger].spells[3].costBurn} </Text>
                                         
                                     </View>
@@ -495,7 +504,7 @@ const styles=StyleSheet.create({
         color:'white',
         fontSize:hp('1.9%'),
         marginBottom:hp('1.5%'),
-        textAlign:'justify',
+        textAlign:'center',
         marginVertical:hp('1%')
        
         
@@ -505,11 +514,11 @@ const styles=StyleSheet.create({
         justifyContent:'space-between'
     },skills
     :{
-        flexDirection:'column',width:wp('25%'),
+        width:wp('25%'),
         height:hp('15%'),
-        alignItems: 'center',
-        justifyContent:'space-between', height:hp('15%'),
-        padding:wp('3%'),
+        justifyContent:'space-between',
+        padding:wp('1.5%'),
+        alignItems:'stretch'
     },
     dot:{
         width:wp('3%'),height:hp('1%'), backgroundColor:'orange',borderRadius:wp('1%')
