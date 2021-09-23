@@ -215,6 +215,145 @@ export default function Detail  ({route,navigation})  {
             return <AppLoading />
           } 
         else{
+        var e_skill = data[deger].spells[2].description;
+        var e_skill_replace = e_skill.replace(/<br><br>/g, "");//replace every "like" with blank ""
+        var q_skill = data[deger].spells[0].description;
+        var q_skill_replace = q_skill.replace(/<br><br>/g, "");//replace every "like" with blank ""
+        var w_skill = data[deger].spells[1].description;
+        var w_skill_replace = w_skill.replace(/<br><br>/g, "");//replace every "like" with blank ""
+        var r_skill = data[deger].spells[3].description;
+        var r_skill_replace = r_skill.replace(/<br><br>/g, "");//replace every "like" with blank ""
+        var p_skill = data[deger].passive.description;
+        var p_skill_replace = p_skill.replace(/<br><br>/g, "");//replace every "like" with blank ""
+        r_skill_replace=r_skill_replace.replace(/<keywordMajor>/g, "")
+        r_skill_replace=r_skill_replace.replace('</keywordMajor>', "")
+        w_skill_replace=w_skill_replace.replace(`<font color='#9b0f5f'>`,"")
+        w_skill_replace=w_skill_replace.replace(`</font>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#9b0f5f'>`,"")
+        p_skill_replace=p_skill_replace.replace(`</font>`,"")
+        q_skill_replace=q_skill_replace.replace(/<br>/g,"")
+        var s_skill = data[deger].lore;
+        var s_skill_replace = s_skill.replace(/<i>/g, "");//replace every "like" with blank ""
+        s_skill_replace=s_skill_replace.replace('</i>',"")
+        e_skill_replace=e_skill_replace.replace('<OnHit>',"")
+        e_skill_replace=e_skill_replace.replace('</OnHit>',"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#669900'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#669900'>`,"")
+        p_skill_replace=p_skill_replace.replace(`</font>`,"")
+        e_skill_replace=e_skill_replace.replace(`<font color='#669900'>`,"")
+        e_skill_replace=e_skill_replace.replace(`</font>`,"")
+        e_skill_replace=e_skill_replace.replace(`<font color='#FFFFFF'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#FFF673'>`,"")
+        q_skill_replace=q_skill_replace.replace(`<font color='#FFF673'>`,"")
+        w_skill_replace=w_skill_replace.replace(`<font color='#FFF673'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#fe5c50'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#8484fb'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#fe5c50'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#8484fb'>`,"")
+        p_skill_replace=p_skill_replace.replace(`</font>`,"")
+        p_skill_replace=p_skill_replace.replace(`</font>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#FFF673'>`,"")
+        q_skill_replace=q_skill_replace.replace(`<font color='#00DD33'>`,"")
+        q_skill_replace=q_skill_replace.replace(`<font color='#FFF673'>`,"")
+        q_skill_replace=q_skill_replace.replace(`</font>`,"")
+        q_skill_replace=q_skill_replace.replace(`</font>`,"")
+        q_skill_replace=q_skill_replace.replace(`</font>`,"")
+        w_skill_replace=w_skill_replace.replace(`<font color='#00DD33'>`,"")
+        w_skill_replace=w_skill_replace.replace(`</font>`,"")
+        e_skill_replace=e_skill_replace.replace(`< color='#00DD33'>`,"")
+        r_skill_replace=r_skill_replace.replace(`<font color='#91d7ee'>`,"")
+        r_skill_replace=r_skill_replace.replace(`<font color='#91d7ee'>`,"")
+        r_skill_replace=r_skill_replace.replace(`<font color='#00DD33'>`,"")
+        r_skill_replace=r_skill_replace.replace(`</font>`,"")
+        r_skill_replace=r_skill_replace.replace(`</font>`,"")
+        r_skill_replace=r_skill_replace.replace(`</font>`,"")
+        w_skill_replace=w_skill_replace.replace(`<br>`,"")
+        e_skill_replace=e_skill_replace.replace(`<br>`,"")
+        w_skill_replace=w_skill_replace.replace(`<font color='#91d7ee'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#ee91d7'>`,"")
+        p_skill_replace=p_skill_replace.replace('<scaleArmor>',"")
+        p_skill_replace=p_skill_replace.replace('</scaleArmor>',"")
+        p_skill_replace=p_skill_replace.replace('<scaleMR>',"")
+        p_skill_replace=p_skill_replace.replace('</scaleMR>',"")
+        q_skill_replace=q_skill_replace.replace('<magicDamage>',"")
+        q_skill_replace=q_skill_replace.replace('</magicDamage>',"")
+        q_skill_replace=q_skill_replace.replace('<spellName>',"")
+        q_skill_replace=q_skill_replace.replace('</spellName>',"")
+        q_skill_replace=q_skill_replace.replace('<spellName>',"")
+        q_skill_replace=q_skill_replace.replace('</spellName>',"")
+        w_skill_replace=w_skill_replace.replace('<spellPassive>',"")
+        w_skill_replace=w_skill_replace.replace('</spellPassive>',"")
+        w_skill_replace=w_skill_replace.replace('<scaleArmor>',"")
+        w_skill_replace=w_skill_replace.replace('</scaleArmor>',"")
+        w_skill_replace=w_skill_replace.replace('<scaleMR>',"")
+        w_skill_replace=w_skill_replace.replace('</scaleMR>',"")
+        w_skill_replace=w_skill_replace.replace('<spellActive>',"")
+        w_skill_replace=w_skill_replace.replace('</spellActive>',"")
+        w_skill_replace=w_skill_replace.replace('<li>',"")
+        w_skill_replace=w_skill_replace.replace('<li>',"")
+        w_skill_replace=w_skill_replace.replace('</li>',"")
+        w_skill_replace=w_skill_replace.replace('</li>',"")
+        e_skill_replace=e_skill_replace.replace('<scaleArmor>',"")
+        e_skill_replace=e_skill_replace.replace('</scaleArmor>',"")
+        e_skill_replace=e_skill_replace.replace('<scaleMR>',"")
+        e_skill_replace=e_skill_replace.replace('</scaleMR>',"")
+        e_skill_replace=e_skill_replace.replace('<status>',"")
+        e_skill_replace=e_skill_replace.replace('</status>',"")
+        r_skill_replace=r_skill_replace.replace('<status>',"")
+        r_skill_replace=r_skill_replace.replace('</status>',"")
+        r_skill_replace=r_skill_replace.replace('<status>',"")
+        r_skill_replace=r_skill_replace.replace('</status>',"")
+        r_skill_replace=r_skill_replace.replace('<magicDamage>',"")
+        r_skill_replace=r_skill_replace.replace('</magicDamage>',"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#BBFFFF'>`,"")
+        r_skill_replace=r_skill_replace.replace(`<font color='#cd90ee'>`,"")
+        p_skill_replace=p_skill_replace.replace('<mainText>',"")
+        p_skill_replace=p_skill_replace.replace('</mainText>',"")
+        p_skill_replace=p_skill_replace.replace('<status>',"")
+        p_skill_replace=p_skill_replace.replace('</status>',"")
+        p_skill_replace=p_skill_replace.replace('<status>',"")
+        p_skill_replace=p_skill_replace.replace('</status>',"")
+        p_skill_replace=p_skill_replace.replace('<status>',"")
+        p_skill_replace=p_skill_replace.replace('</status>',"")
+        q_skill_replace=q_skill_replace.replace(`<font color='#FF3300'>`,"")
+        w_skill_replace=w_skill_replace.replace(`<font color='#FF3300'>`,"")
+        e_skill_replace=e_skill_replace.replace(`<font color='#FF3300'>`,"")
+        p_skill_replace=p_skill_replace.replace('<passive>',"")
+        p_skill_replace=p_skill_replace.replace('</passive>',"")
+        p_skill_replace=p_skill_replace.replace('<passive>',"")
+        p_skill_replace=p_skill_replace.replace('</passive>',"")
+        p_skill_replace=p_skill_replace.replace('<i>',"")
+        p_skill_replace=p_skill_replace.replace('</i>',"")
+        p_skill_replace=p_skill_replace.replace('<i>',"")
+        p_skill_replace=p_skill_replace.replace('</i>',"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#FF9900'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#FF9900'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#FF9900'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#FF9900'>`,"")
+        p_skill_replace=p_skill_replace.replace('<br>',"")
+        p_skill_replace=p_skill_replace.replace('<br>',"")
+        p_skill_replace=p_skill_replace.replace('<br>',"")
+        e_skill_replace=e_skill_replace.replace('<passive>',"")
+        e_skill_replace=e_skill_replace.replace('</passive>',"")
+        e_skill_replace=e_skill_replace.replace('<active>',"")
+        e_skill_replace=e_skill_replace.replace('</active>',"")
+        p_skill_replace=p_skill_replace.replace('<speed>',"")
+        p_skill_replace=p_skill_replace.replace('</speed>',"")
+        p_skill_replace=p_skill_replace.replace('<keywordName>',"")
+        p_skill_replace=p_skill_replace.replace('</keywordName>',"")
+        q_skill_replace=q_skill_replace.replace('<OnHit>',"")
+        q_skill_replace=q_skill_replace.replace('</OnHit>',"")
+        q_skill_replace=q_skill_replace.replace('<status>',"")
+        q_skill_replace=q_skill_replace.replace('</status>',"")
+        p_skill_replace=p_skill_replace.replace(`<font color='#C200E1'>`,"")
+        q_skill_replace=q_skill_replace.replace(`<font color='#6655CC'>`,"")
+        e_skill_replace=e_skill_replace.replace(`<font color='#99FF99'>`,"")
+        r_skill_replace=p_skill_replace.replace('<factionIonia1>',"")
+        r_skill_replace=p_skill_replace.replace('</factionIonia1>',"")
+        w_skill_replace=w_skill_replace.replace(`<font color='#FF9900'>`,"")
+        w_skill_replace=w_skill_replace.replace(`<font color='#FF9900'>`,"")
+        w_skill_replace=w_skill_replace.replace(`<font color='#FF9900'>`,"")
+        w_skill_replace=w_skill_replace.replace(`<font color='#FF9900'>`,"")
         return(
             <SafeAreaView style={styles.container}>
                    
@@ -268,7 +407,7 @@ export default function Detail  ({route,navigation})  {
                                         </View>
                                         <View style={{alignItems:'center',marginTop:hp('2%')}}>
                                             <Text style={{color:'aqua' ,fontFamily:'josefin',textDecorationLine:'underline',fontSize:hp('2%')}}>Story</Text>
-                                        <Text style={{color:'white',textAlign:'justify',fontSize:hp('2%'),marginTop:hp('2%'),fontFamily:'josefin'}}> {data[deger].lore} </Text>
+                                        <Text style={{color:'white',textAlign:'justify',fontSize:hp('2%'),marginTop:hp('2%'),fontFamily:'josefin'}}> {s_skill_replace} </Text>
                                         </View>
                                         
                                         <View style={{alignItems:'center',marginTop:hp('2%')}}>
@@ -334,7 +473,7 @@ export default function Detail  ({route,navigation})  {
                                                
                                                 <Image resizeMode="stretch" style={{width:wp('14%'),height:hp('8%'),borderRadius:10}}  source={{uri:`http://ddragon.leagueoflegends.com/cdn/${versions}/img/passive/${data[deger].passive.image.full}`}} ></Image>
                                                 <View style={[styles.skills,{justifyContent:'center'}]}>
-                                                <Text style={[styles.specsText,{fontFamily:'josefin',color:'orange'}]}> Pasif </Text>
+                                                <Text style={[styles.specsText,{fontFamily:'josefin',color:'orange'}]}> Passive </Text>
                                                 </View>
                                                 <View style={[styles.skills,{justifyContent:'center'}]}>
                                                 <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].passive.name} </Text>
@@ -344,7 +483,7 @@ export default function Detail  ({route,navigation})  {
                                                 </View>
                                                 
                                             </View>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].passive.description} </Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {p_skill_replace} </Text>
                                         </View>
                                         <View style={{marginTop:hp('3%'),padding:wp('2.5%')}}>
                                         
@@ -356,19 +495,19 @@ export default function Detail  ({route,navigation})  {
                                                 </View>
                                                 
                                                 <View style={[styles.skills]}>
-                                                <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Bekleme Süresi</Text>
+                                                <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Cooldown</Text>
                                                 <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[0].cooldownBurn} </Text>
                                                 </View>
                                                 <View style={styles.skills}>
-                                                <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Menzil</Text>
+                                                <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Range</Text>
                                                 <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[0].rangeBurn} </Text>
                                                 </View>
                                                 
                                                 
                                                 
                                             </View>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].spells[0].description} </Text>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Bedeli : {data[deger].spells[0].costBurn} </Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {q_skill_replace} </Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Cost : {data[deger].spells[0].costBurn} </Text>
                                             
                                         </View>
                                         <View style={{marginTop:hp('3%'),padding:wp('2.5%')}}>
@@ -381,19 +520,19 @@ export default function Detail  ({route,navigation})  {
                                             </View>
                                             
                                             <View style={[styles.skills]}>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Bekleme Süresi</Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Cooldown</Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[1].cooldownBurn} </Text>
                                             </View>
                                             <View style={styles.skills}>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Menzil</Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Range</Text>
                                             <Text  style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[1].rangeBurn} </Text>
                                             </View>
                                             
                                             
                                             
                                         </View>
-                                        <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].spells[1].description} </Text>
-                                        <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Bedeli : {data[deger].spells[1].costBurn} </Text>
+                                        <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {w_skill_replace} </Text>
+                                        <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Cost : {data[deger].spells[1].costBurn} </Text>
                                         
                                     </View>
                                     <View style={{marginTop:hp('3%'),padding:wp('2.5%')}}>
@@ -406,19 +545,19 @@ export default function Detail  ({route,navigation})  {
                                             </View>
                                             
                                             <View style={[styles.skills]}>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Bekleme Süresi</Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Cooldown</Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[2].cooldownBurn} </Text>
                                             </View>
                                             <View style={styles.skills}>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Menzil</Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Range</Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[2].rangeBurn} </Text>
                                             </View>
                                             
                                             
                                             
                                         </View>
-                                        <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].spells[2].description} </Text>
-                                        <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Bedeli : {data[deger].spells[2].costBurn} </Text>
+                                        <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {e_skill_replace} </Text>
+                                        <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Cost : {data[deger].spells[2].costBurn} </Text>
                                         
                                     </View>
                                     <View style={{marginTop:hp('3%'),padding:wp('2.5%')}}>
@@ -431,19 +570,19 @@ export default function Detail  ({route,navigation})  {
                                             </View>
                                             
                                             <View style={[styles.skills]}>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Bekleme Süresi</Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Cooldown</Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[3].cooldownBurn} </Text>
                                             </View>
                                             <View style={styles.skills}>
-                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Menzil</Text>
+                                            <Text style={[styles.specsText,{fontFamily:'josefin'}]}>Range</Text>
                                             <Text style={[styles.specsText,{textAlign:'center',fontFamily:'josefin'}]}> {data[deger].spells[3].rangeBurn} </Text>
                                             </View>
                                             
                                             
                                             
                                         </View>
-                                        <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {data[deger].spells[3].description} </Text>
-                                        <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Bedeli : {data[deger].spells[3].costBurn} </Text>
+                                        <Text style={[styles.specsText,{fontFamily:'josefin',textAlign:'justify'}]}> {r_skill_replace} </Text>
+                                        <Text style={[styles.specsText,{fontFamily:'josefin'}]}> Mana Cost : {data[deger].spells[3].costBurn} </Text>
                                         
                                     </View>
                             </ScrollView>
@@ -502,10 +641,10 @@ const styles=StyleSheet.create({
     },
     specsText:{
         color:'white',
-        fontSize:hp('1.9%'),
+        fontSize:hp('1.8%'),
         marginBottom:hp('1.5%'),
         textAlign:'center',
-        marginVertical:hp('1%')
+        
        
         
     },
@@ -514,7 +653,7 @@ const styles=StyleSheet.create({
         justifyContent:'space-between'
     },skills
     :{
-        width:wp('25%'),
+        width:wp('28%'),
         height:hp('15%'),
         justifyContent:'space-between',
         padding:wp('1.5%'),
