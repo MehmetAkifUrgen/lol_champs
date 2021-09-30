@@ -8,6 +8,7 @@ public class BasePackageList {
   public List<Package> getPackageList() {
     return Arrays.<Package>asList(
         new expo.modules.ads.admob.AdMobPackage(),
+        new expo.modules.splashscreen.SplashScreenPackage(),
         new expo.modules.application.ApplicationPackage(),
         new expo.modules.constants.ConstantsPackage(),
         new expo.modules.errorrecovery.ErrorRecoveryPackage(),
@@ -18,7 +19,6 @@ public class BasePackageList {
         new expo.modules.lineargradient.LinearGradientPackage(),
         new expo.modules.permissions.PermissionsPackage(),
         new expo.modules.screenorientation.ScreenOrientationPackage(),
-        new expo.modules.splashscreen.SplashScreenPackage(),
         new expo.modules.updates.UpdatesPackage()
     );
   }

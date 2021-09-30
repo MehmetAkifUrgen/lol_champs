@@ -1,8 +1,9 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View ,ActivityIndicator,Image,ScrollView, SafeAreaView,ImageBackground, TouchableOpacity,Animated} from 'react-native';
+import { StyleSheet, Text, View ,ActivityIndicator,Image,ScrollView, SafeAreaView,ImageBackground, TouchableOpacity,Animated,BackHandler} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Swiper from 'react-native-swiper'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 import {
     BarChart,
   } from "react-native-chart-kit";
@@ -40,8 +41,21 @@ export default function Detail  ({route,navigation})  {
                 AsyncStorage.getItem('language', (errorrr,language) => {
                     if(!error){
                         setValue(value)
-                        if(value !== null){
-                            fetch(`http://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/champion/${value}.json`, {
+                        if(value !== null){  
+                                if(language == null){
+                                    
+                                    fetch(`http://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion/${value}.json`, {
+                                method: 'GET',
+                              
+                                    }).then((response)=>response.json()).then((json)=>{setData(json.data),setnewData(data[deger]),setIsLoading(false),setControl(true) })
+                                    .catch((err)=> {setIsLoading(false),setError(err)}
+                                       );
+                                    
+                                    
+                                }
+
+                                else{
+                                    fetch(`http://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/champion/${value}.json`, {
                                 method: 'GET',
                               
                                     }).then((response)=>response.json()).then((json)=>{setData(json.data),setnewData(data[deger]),setIsLoading(false),setControl(true) })
@@ -49,9 +63,10 @@ export default function Detail  ({route,navigation})  {
                                        );
                                    
                                 };
-                               
+                                }
                                 
-                        }
+                            }   
+                        
                 })
                 
                 
@@ -67,9 +82,9 @@ export default function Detail  ({route,navigation})  {
         
       }
     async function  odul () {
-        await AdMobRewarded.setAdUnitID('ca-app-pub-7956816566156883/9819910150');
-        await AdMobRewarded.requestAdAsync();
-        await AdMobRewarded.showAdAsync();
+        await AdMobInterstitial.setAdUnitID('ca-app-pub-7956816566156883/1481637553');
+        await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
+        await AdMobInterstitial.showAdAsync(); 
     } 
       async function normalYap() {
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
@@ -95,11 +110,11 @@ export default function Detail  ({route,navigation})  {
         
        
         useEffect(() => {
-            
+          
             setIsLoading(true);
             getChampionsDetail();
-           // gecis();
            
+            
             
             
          },[] );
@@ -107,9 +122,9 @@ export default function Detail  ({route,navigation})  {
             headAnimations();
       
           })
-         
 
          if (isLoading) {
+            
             return (
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                <ActivityIndicator size="large" color="#5500dc" />
@@ -131,12 +146,17 @@ export default function Detail  ({route,navigation})  {
          }
      
     if(kostum){
-        // odul();
+        
+        
+        odul();
+        BackHandler.addEventListener('hardwareBackPress', function () {
+            setKostum(false)
+          });
+        
         changeScreenOrientation();
-        
-        
-
+    
         const costum = data[deger].skins.map((value,index) => {
+            
             skin.push(value.num)
             return(
                 <View style={{
@@ -146,7 +166,7 @@ export default function Detail  ({route,navigation})  {
                 }}  key={index}>
                     <Image 
                     style={{width:'100%',height:'100%',position:'absolute'}}    
-                    resizeMode="cover" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${value.num}.jpg`}}>
+                    resizeMode="stretch" source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${value.num}.jpg`}}>
                     </Image>
                     <Icon
                         style={{alignItems:'flex-start',zIndex:2,marginTop:hp('4%'),marginLeft:wp('4%'),width:hp('6%')}}
@@ -354,6 +374,10 @@ export default function Detail  ({route,navigation})  {
         w_skill_replace=w_skill_replace.replace(`<font color='#FF9900'>`,"")
         w_skill_replace=w_skill_replace.replace(`<font color='#FF9900'>`,"")
         w_skill_replace=w_skill_replace.replace(`<font color='#FF9900'>`,"")
+        p_skill_replace=p_skill_replace.replace(`<physicalDamage>`,"")
+        p_skill_replace=p_skill_replace.replace(`</physicalDamage>`,"")
+        r_skill_replace=r_skill_replace.replace(`<physicalDamage>`,"")
+        r_skill_replace=r_skill_replace.replace(`</physicalDamage>`,"")
         return(
             <SafeAreaView style={styles.container}>
                    
@@ -372,7 +396,7 @@ export default function Detail  ({route,navigation})  {
                         type='font-awesome'
                         onPress={() => navigation.navigate('Home')} />
                     <TouchableOpacity onPress={()=> setKostum(true) } style={{marginRight:wp('2%')
-                    ,marginBottom:hp('2%')  ,width:wp('25%') ,justifyContent:'center',alignItems: 'center',top:hp('13%'),left:wp('73%')}}>
+                    ,marginBottom:hp('2%')  ,width:wp('25%') ,justifyContent:'center',alignItems: 'center',top:hp('12%'),left:wp('80%')}}>
                             <View style={{backgroundColor:'orange',borderRadius:wp('1%'),padding:wp('1%')}}>
                             <Text style={{color:'white',fontSize:hp('2%'),fontFamily:'josefin'}}>
                             Skins

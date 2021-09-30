@@ -4,17 +4,18 @@ import { StyleSheet, Text, View ,ActivityIndicator, TextInput,Image, FlatList,To
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { filter } from 'lodash';
-import LottieView from 'lottie-react-native';
-import { Animated, Easing } from 'react-native';
+import { Animated } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import { LinearGradient } from 'expo-linear-gradient';
 import Swiper from 'react-native-swiper';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Icon } from 'react-native-elements';
-import {Menu,Button,Provider } from 'react-native-paper';
+import {Menu,Provider } from 'react-native-paper';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import {
+  AdMobBanner
+} from 'expo-ads-admob';
 
 
 
@@ -75,51 +76,20 @@ export default function App() {
     };
    
     
-    const startAnimations = () => {
-        Animated.timing(startAnimated,{
-          toValue:360,
-          duration:1000,
-          useNativeDriver:false,
-          easing:Easing.elastic(10)
-        }).start()
-    };
-    const opaAnimations = () => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(opaAnimated,{
-            toValue:.3,
-            duration:3000,
-            useNativeDriver:false,
-          
-            
-          }),
-          Animated.timing(opaAnimated,{
-            toValue:1,
-            duration:3000,
-            useNativeDriver:false,
-           
-          })
-        ]),
-        
-      ).start()
+   
      
-  };
-     const startInterpolate = startAnimated.interpolate({
-       inputRange:[0,360],
-       outputRange:['0deg','360deg']
-     })
-     const rotateStyles = {
-       transform:[{
-         rotate:startInterpolate
-       }]
-     }
     
      useEffect(() => {
       readItemFromStorage();
     }, []);
 
+    async function normalYap() {
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+     
+    }
+
     useEffect(() => {
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+      normalYap();
       getVersion();
       setIsLoading(true);
 
@@ -132,11 +102,7 @@ export default function App() {
      
    },[control] );
 
-    useEffect(() => {
-      startAnimations();
-      opaAnimations();
-      
-    })
+    
    
     
 
@@ -169,8 +135,8 @@ export default function App() {
       
       return(
           <View style={{flexDirection:'row',width:'100%',height:'100%'}} key={index}>
-                <Animated.Image resizeMode="stretch" style={{ width:'100%',height:'100%',borderBottomLeftRadius:wp('15%'),borderBottomRightRadius:wp('15%'),
-                 backgroundColor: 'transparent',position:'absolute'}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${value.length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * Object.values(data).length)]["id"] }_0.jpg`}} ></Animated.Image>
+                <Image defaultSource={require('../../assets/jarvan.jpg')}  resizeMode="stretch"  style={{ width:'100%',height:'100%',
+                position:'absolute',borderBottomRightRadius:wp('10%')}} source={{uri:`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${value.length ==0 ? "Jarvan" :Object.values(data)[Math.floor(Math.random() * Object.values(data).length)]["id"] }_0.jpg`}} ></Image>
           </View>
           
           
@@ -179,7 +145,8 @@ export default function App() {
 
    const gonder = ( champ,image )=>{
     
-
+    setQuery('')
+    setControl(!control)
     setProgress(false)
  
     AsyncStorage.setItem('hero', champ).then(() => {
@@ -194,7 +161,9 @@ export default function App() {
       // console.log("TOKEN ==>>", version[0])
  
      });
+    
     navigation.navigate('Detail',{champ})
+    
    
    }
    
@@ -208,8 +177,8 @@ export default function App() {
     return(
       
             <TouchableOpacity onPress={()=>gonder(item.id,item.image.full)} style={styles.hero}>
-          <Animated.Image  resizeMode="stretch" style={{width:wp('25%'),height:hp('18%'),transform:[{rotate:startInterpolate}],borderRadius:wp('8%')}} source={{uri:icon+""+item.image.full}} >
-            </Animated.Image>   
+          <Image  resizeMode="stretch" style={{width:wp('22%'),height:hp('16%'),borderRadius:wp('2%')}} source={{uri:icon+""+item.image.full}} >
+            </Image>   
             <Text maxFontSizeMultiplier={1} numberOfLines={1} style={[{fontFamily:'josefin'},styles.text]} > {item.name} </Text>
         </TouchableOpacity>
 
@@ -256,10 +225,10 @@ export default function App() {
              {costum}
            </Swiper>
            <Menu
-           style={{alignItems:'flex-end',justifyContent:'flex-end',left: wp('70%'),}}
+           style={{left: wp('80%'),position:'relative',zIndex: 100}}
           visible={visible}
           onDismiss={closeMenu}
-          anchor={<Icon underlayColor="transparent" onPress={openMenu} style={{  top: 0, left: wp('90%'), right: 0, width: wp('7%'),zIndex:1}} size={wp('7%')} color="white" name="language"></Icon>}>
+          anchor={<Icon underlayColor="transparent" onPress={openMenu} style={{  left: wp('92%'),width: wp('7%'),zIndex: 100}} size={wp('7%')} color="orange" name="language"></Icon>}>
           <Menu.Item onPress={() => {setLanguage('en_US'),setVisible(false)}} title="English" />
           <Menu.Item onPress={() => {setLanguage("de_DE"),setVisible(false)}} title="German" />
           <Menu.Item onPress={() => {setLanguage('es_ES'),setVisible(false)}} title="Spanish" />
@@ -276,7 +245,7 @@ export default function App() {
                 
                 value={query}
                 onChangeText={queryText => handleSearch(queryText)}
-                placeholder="Ara"
+                placeholder="Search"
                 style={[styles.text_Input,{fontFamily:'josefin'}]}
             
           />
@@ -295,6 +264,11 @@ export default function App() {
                   horizontal={false}
                   initialNumToRender={7}
                 />
+                <AdMobBanner
+              bannerSize="fullBanner"
+              adUnitID="ca-app-pub-7956816566156883/1667046797"
+              servePersonalizedAds // true or false 
+               />
         </SafeAreaView>
        </Provider>
       );
@@ -314,6 +288,7 @@ const styles = StyleSheet.create({
   header:{  
     height:'25%',
     width:'100%'  ,
+    
   },
   headerText:{
     color:'black',
