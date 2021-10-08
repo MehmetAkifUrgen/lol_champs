@@ -1,38 +1,35 @@
 {
   "expo": {
-    "name": "lol_heros",
-    "slug": "lol_heros",
-    "version": "1.0.6",
+    "name": "LOL Heroes",
+    "slug": "lol_heroes",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/new_splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
-    
+
     "android": {
-      "versionCode":7,
+      "versionCode": 9,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.urgenakif.lol_heros",
       "config": {
-        
         "googleMobileAdsAppId": "ca-app-pub-7956816566156883~3951478134"
       },
       "googleServicesFile": "./google-services.json",
-      "permissions":  [
+      "permissions": [
         "INTERNET",
         "READ_EXTERNAL_STORAGE",
         "WAKE_LOCK",
@@ -47,15 +44,11 @@
         "com.majeur.launcher.permission.UPDATE_BADGE",
         "com.sec.android.provider.badge.permission.READ",
         "com.sec.android.provider.badge.permission.WRITE",
-        "com.sonyericsson.home.permission.BROADCAST_BADGE"]
-     
-    
+        "com.sonyericsson.home.permission.BROADCAST_BADGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
-    
-   
-    
   }
 }
