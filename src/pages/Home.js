@@ -7,7 +7,6 @@ import {
   TextInput,
   Image,
   FlatList,
-  TouchableOpacity,
   SafeAreaView,
   ImageBackground,
   Platform,
@@ -29,6 +28,9 @@ import { Icon } from "react-native-elements";
 import { Menu, Provider } from "react-native-paper";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { AdMobBanner } from "expo-ads-admob";
+import Item from "../components/home/item";
+import Heroes from "../components/home/heroes";
+import Loading from "../components/home/loading";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -116,11 +118,7 @@ export default function App() {
   }, [control]);
 
   if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="orange" />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (error) {
@@ -135,35 +133,22 @@ export default function App() {
       </View>
     );
   }
-  // console.log("*****",Object.values(data).length )
-  // console.log('--------',version[0])
 
-  const costum = Object.values(data).map((value, index) => {
+  const heroes = Object.values(data).map((value, index) => {
     return (
-      <View
-        style={{ flexDirection: "row", width: "100%", height: "100%" }}
-        key={index}
-      >
-        <Image
-          defaultSource={require("../../assets/jarvan.jpg")}
-          resizeMode="stretch"
-          style={{
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            borderBottomRightRadius: wp("10%"),
-          }}
-          source={{
-            uri: `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${
-              value.length == 0
-                ? "Jarvan"
-                : Object.values(data)[
-                    Math.floor(Math.random() * Object.values(data).length)
-                  ]["id"]
-            }_0.jpg`,
-          }}
-        ></Image>
-      </View>
+      <Heroes
+        keys={index}
+        defaultSource={require("../../assets/jarvan.jpg")}
+        source={{
+          uri: `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${
+            value.length == 0
+              ? "Jarvan"
+              : Object.values(data)[
+                  Math.floor(Math.random() * Object.values(data).length)
+                ]["id"]
+          }_0.jpg`,
+        }}
+      />
     );
   });
 
@@ -186,38 +171,15 @@ export default function App() {
   };
 
   const renderItem = ({ item }) => {
-    const champ = item.id;
-    const name = item.name;
     return (
-      <TouchableOpacity
+      <Item
         onPress={() => gonder(item.id, item.image.full)}
-        style={styles.hero}
-      >
-        <Image
-          resizeMode="stretch"
-          style={{
-            width: wp("24%"),
-            height: hp("14%"),
-            borderRadius: wp("2%"),
-          }}
-          source={{ uri: icon + "" + item.image.full }}
-        ></Image>
-        <Text
-          maxFontSizeMultiplier={1}
-          numberOfLines={1}
-          style={[{ fontFamily: "josefin" }, styles.text]}
-        >
-          {" "}
-          {item.name}{" "}
-        </Text>
-      </TouchableOpacity>
+        uri={icon + "" + item.image.full}
+        name={item.name}
+      />
     );
   };
-  // const searchFilter = (textToSearch) => {
 
-  //     setData( Object.values(newData).filter(i => i.name.toLowerCase().includes(textToSearch.toLowerCase())));
-
-  //   };
   const handleSearch = (text) => {
     const formattedQuery = text.toLowerCase();
     const filteredData = filter(Object.values(newData), (hero) => {
@@ -252,17 +214,17 @@ export default function App() {
               showsButtons={false}
               autoplay={true}
             >
-              {costum}
+              {heroes}
             </Swiper>
             <Menu
-              style={{ left: wp("80%"), position: "relative", zIndex: 100 }}
+              style={styles.menu}
               visible={visible}
               onDismiss={closeMenu}
               anchor={
                 <Icon
                   underlayColor="transparent"
                   onPress={openMenu}
-                  style={{ left: wp("92%"), width: wp("7%"), zIndex: 100 }}
+                  style={styles.menuIcon}
                   size={wp("7%")}
                   color="orange"
                   name="language"
@@ -411,5 +373,15 @@ const styles = StyleSheet.create({
   },
   icon: {
     width: wp("5%"),
+  },
+  menu: {
+    left: wp("80%"),
+    position: "relative",
+    zIndex: 100,
+  },
+  menuIcon: {
+    left: wp("92%"),
+    width: wp("7%"),
+    zIndex: 100,
   },
 });
