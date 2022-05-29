@@ -5,14 +5,16 @@ import Detail from './pages/Detail'
 
 const Stack = createStackNavigator();
 const screenOptionStyle = {
-    headerShown: false
+    
 }
 
-const Router = () => {
+const Router = (props) => {
     return(
-        <Stack.Navigator screenOptions={screenOptionStyle} >
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Detail" component={Detail} />
+        <Stack.Navigator screenOptions={{
+            headerTitleAlign:'center'
+        }} >
+            <Stack.Screen options={{title:'League of Legends'}} name="Home" component={Home} />
+            <Stack.Screen  name="Detail" component={Detail} />
             
 
         </Stack.Navigator>

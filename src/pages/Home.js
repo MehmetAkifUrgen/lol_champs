@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ActivityIndicator,
+  Button,
   TextInput,
   Image,
   FlatList,
@@ -31,13 +31,24 @@ import { AdMobBanner } from "expo-ads-admob";
 import Item from "../components/home/item";
 import Heroes from "../components/home/heroes";
 import Loading from "../components/home/loading";
+import Modal from "react-native-modal";
+import LanguageItem from "../components/LanguageItem";
 
-export default function App() {
+export default function App({ navigation }) {
   let [fontsLoaded] = useFonts({
     josefin: require("../../assets/JosefinSans-Medium.ttf"),
   });
 
-  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle:{
+        backgroundColor:'black'
+      },
+      headerTintColor:'white',
+      headerRight: () => menu(),
+    });
+  }, [navigation]);
+
   const [data, setData] = useState([]);
   const [newData, setnewData] = useState([]);
   const [error, setError] = useState(null);
@@ -79,6 +90,18 @@ export default function App() {
         setIsLoading(false), setError(err);
       });
   };
+
+  function menu() {
+    return (
+      <Icon
+        style={styles.menuIcon}
+        onPress={openMenu}
+        size={wp("7%")}
+        color="white"
+        name="language"
+      ></Icon>
+    );
+  }
 
   const getChampionsName = () => {
     fetch(
@@ -174,7 +197,7 @@ export default function App() {
     return (
       <Item
         onPress={() => gonder(item.id, item.image.full)}
-        uri={icon + "" + item.image.full}
+        uri={`http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${item.id}_0.jpg`}
         name={item.name}
       />
     );
@@ -202,74 +225,64 @@ export default function App() {
   } else {
     return (
       <Provider>
-        <SafeAreaView style={styles.container}>
-          <ImageBackground
+        <View style={styles.container}>
+          {/* <ImageBackground
             style={styles.image_background}
             source={require("../../assets/splash.png")}
-          ></ImageBackground>
-          <View style={styles.header}>
-            <Swiper
-              autoplayTimeout={5}
-              showsPagination={false}
-              showsButtons={false}
-              autoplay={true}
+          ></ImageBackground> */}
+          <Modal isVisible={visible}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              {heroes}
-            </Swiper>
-            <Menu
-              style={styles.menu}
-              visible={visible}
-              onDismiss={closeMenu}
-              anchor={
-                <Icon
-                  underlayColor="transparent"
-                  onPress={openMenu}
-                  style={styles.menuIcon}
-                  size={wp("7%")}
-                  color="orange"
-                  name="language"
-                ></Icon>
-              }
-            >
-              <Menu.Item
+              <LanguageItem
+                
+                text="English"
                 onPress={() => {
                   setLanguage("en_US"), setVisible(false);
                 }}
-                title="English"
               />
-              <Menu.Item
+              <LanguageItem
+              
+                text="Deutsch"
                 onPress={() => {
-                  setLanguage("de_DE"), setVisible(false);
+                  setLanguage("de_De"), setVisible(false);
                 }}
-                title="German"
               />
-              <Menu.Item
+              <LanguageItem
+                
+                text="Español"
                 onPress={() => {
                   setLanguage("es_ES"), setVisible(false);
                 }}
-                title="Spanish"
               />
-              <Menu.Item
+              <LanguageItem
+                
+                text="Français"
                 onPress={() => {
                   setLanguage("fr_FR"), setVisible(false);
                 }}
-                title="French"
               />
-              <Menu.Item
+              <LanguageItem
+                text="Türkçe"
+               
                 onPress={() => {
                   setLanguage("tr_TR"), setVisible(false);
                 }}
-                title="Turkish"
               />
-              <Menu.Item
+              <LanguageItem
+              
+                text="Italiano"
                 onPress={() => {
                   setLanguage("it_IT"), setVisible(false);
                 }}
-                title="Italian"
               />
-            </Menu>
-          </View>
-
+              <Button color={"red"} title="Close" onPress={closeMenu} />
+            </View>
+          </Modal>
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.text_Input_Viewport}
@@ -296,16 +309,16 @@ export default function App() {
             renderItem={renderItem}
             refreshing={true}
             keyExtractor={(item) => item.key}
-            numColumns={3}
+            numColumns={1}
             horizontal={false}
-            initialNumToRender={7}
+            initialNumToRender={4}
           />
           <AdMobBanner
             bannerSize="fullBanner"
             adUnitID="ca-app-pub-7956816566156883/1667046797"
             servePersonalizedAds // true or false
           />
-        </SafeAreaView>
+        </View>
       </Provider>
     );
   }
@@ -314,12 +327,12 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "black",
   },
-  header: {
-    height: "25%",
-    width: "100%",
-  },
+  // header: {
+  //   height: "25%",
+  //   width: "100%",
+  // },
   headerText: {
     color: "black",
     fontSize: 20,
@@ -353,17 +366,21 @@ const styles = StyleSheet.create({
   },
   text_Input: {
     backgroundColor: "#fff",
-    width: wp("30%"),
+    
   },
   text_Input_Viewport: {
     marginHorizontal: "20%",
+    marginTop: "4%",
     marginBottom: "4%",
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: wp("1.5%"),
+    
     borderRadius: wp("1%"),
+    borderWidth: 1,
+    shadowColor: "black",
+    elevation: 8,
   },
   image_background: {
     width: "100%",
@@ -372,15 +389,13 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   icon: {
-    width: wp("5%"),
+    
   },
   menu: {
-    left: wp("80%"),
     position: "relative",
     zIndex: 100,
   },
   menuIcon: {
-    left: wp("92%"),
     width: wp("7%"),
     zIndex: 100,
   },

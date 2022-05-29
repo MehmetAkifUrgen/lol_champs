@@ -25,6 +25,7 @@ import { AdMobInterstitial, AdMobRewarded } from "expo-ads-admob";
 import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
 import { Icon } from "react-native-elements";
+import LinearGradient from "react-native-linear-gradient";
 
 export default function Detail({ route, navigation }) {
   let [fontsLoaded] = useFonts({
@@ -40,6 +41,7 @@ export default function Detail({ route, navigation }) {
   const headAnimated = new Animated.Value(0.7);
   const [kostum, setKostum] = useState(false);
   const [versions, setVersions] = useState("");
+  const [much, setMuch] = useState([]);
   const getChampionsDetail = () => {
     AsyncStorage.getItem("hero", (error, value) => {
       AsyncStorage.getItem("version", (errorr, version) => {
@@ -90,6 +92,46 @@ export default function Detail({ route, navigation }) {
     });
   };
 
+  React.useLayoutEffect(() => {
+    if(kostum){
+      navigation.setOptions({
+        headerShown:false
+      })
+    }
+    else {
+      navigation.setOptions({
+       headerStyle:{
+         backgroundColor:'black'
+       },
+       headerTintColor:'white',
+        title: data.length==0 ? "Loading" :  data[deger].name,
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => setKostum(true)}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              marginRight:5
+            }}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: hp("2%"),
+                fontFamily: "josefin",
+              }}
+            >
+              Skins
+            </Text>
+          </TouchableOpacity>
+        ),
+      });
+    }
+    
+   
+    
+  }, [navigation,data,kostum]);
+
   async function changeScreenOrientation() {
     await ScreenOrientation.lockAsync(
       ScreenOrientation.OrientationLock.LANDSCAPE
@@ -134,7 +176,7 @@ export default function Detail({ route, navigation }) {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="orange" />
+        <ActivityIndicator size="large" color="black" />
       </View>
     );
   }
@@ -162,6 +204,7 @@ export default function Detail({ route, navigation }) {
 
     const costum = data[deger].skins.map((value, index) => {
       skin.push(value.num);
+
       return (
         <View
           style={{
@@ -178,7 +221,7 @@ export default function Detail({ route, navigation }) {
               uri: `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_${value.num}.jpg`,
             }}
           ></Image>
-          <Icon
+          {/* <Icon
             style={{
               alignItems: "flex-start",
               zIndex: 2,
@@ -188,10 +231,10 @@ export default function Detail({ route, navigation }) {
             }}
             name="arrow-circle-left"
             type="font-awesome"
-            color="white"
+            color="black"
             size={hp("6%")}
             onPress={() => setKostum(false)}
-          />
+          /> */}
           <View
             style={{
               alignItems: "center",
@@ -437,23 +480,22 @@ export default function Detail({ route, navigation }) {
       r_skill_replace = r_skill_replace.replace(`<physicalDamage>`, "");
       r_skill_replace = r_skill_replace.replace(`</physicalDamage>`, "");
       return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
           <View style={styles.header}>
             <Animated.Image
               style={{
-                width: "100%",
+                width: "96%",
                 height: "100%",
                 position: "absolute",
-                borderBottomLeftRadius: wp("3%"),
-                borderBottomRightRadius: wp("3%"),
+                borderRadius:25,
                 transform: [{ scale: headAnimated }],
               }}
               resizeMode="stretch"
               source={{
-                uri: `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_0.jpg`,
+                uri: `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${deger}_1.jpg`,
               }}
             ></Animated.Image>
-            <Icon
+            {/* <Icon
               style={{
                 alignItems: "flex-start",
                 justifyContent: "flex-start",
@@ -463,46 +505,16 @@ export default function Detail({ route, navigation }) {
                 width: wp("8%"),
               }}
               name="arrow-circle-left"
-              color="white"
+              color="black"
               size={wp("8%")}
               type="font-awesome"
               onPress={() => navigation.navigate("Home")}
-            />
-            <TouchableOpacity
-              onPress={() => setKostum(true)}
-              style={{
-                marginRight: wp("2%"),
-                marginBottom: hp("2%"),
-                width: wp("25%"),
-                justifyContent: "center",
-                alignItems: "center",
-                top: hp("12%"),
-                left: wp("80%"),
-              }}
-            >
-              <View
-                style={{
-                  backgroundColor: "orange",
-                  borderRadius: wp("1%"),
-                  padding: wp("1%"),
-                }}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: hp("2%"),
-                    fontFamily: "josefin",
-                  }}
-                >
-                  Skins
-                </Text>
-              </View>
-            </TouchableOpacity>
+            /> */}
           </View>
 
           <Swiper activeDotColor="white" dot={dot()} style={styles.wrapper}>
-            <ScrollView style={{ flex: 1 }}>
-              <ImageBackground
+            <ScrollView style={{flex:1, marginBottom:'10%'}}>
+              {/* <ImageBackground
                 style={{
                   width: "100%",
                   height: "100%",
@@ -515,50 +527,23 @@ export default function Detail({ route, navigation }) {
                     skin[skin.length - 1]
                   }.jpg`,
                 }}
-              ></ImageBackground>
+              ></ImageBackground> */}
               <View style={styles.info}>
+                
+
+                <View style={{ flexDirection: "row" }}>{rol}</View>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-around",
                     alignItems: "center",
+                    marginTop: hp("2%"),
+                    backgroundColor: "black",
+                    padding: 10,
+                    borderRadius: 10,
                   }}
                 >
                   <Text
                     style={{
                       color: "white",
-                      fontSize: hp("2.1%"),
-                      fontFamily: "josefin",
-                    }}
-                  >
-                    {data[deger].name}{" "}
-                  </Text>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: hp("1.5%"),
-                      fontFamily: "josefin",
-                    }}
-                  >
-                    {" "}
-                    a.k.a{" "}
-                  </Text>
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: hp("2.1%"),
-                      fontFamily: "josefin",
-                    }}
-                  >
-                    {data[deger].title}{" "}
-                  </Text>
-                </View>
-
-                <View style={{ flexDirection: "row" }}>{rol}</View>
-                <View style={{ alignItems: "center", marginTop: hp("2%") }}>
-                  <Text
-                    style={{
-                      color: "aqua",
                       fontFamily: "josefin",
                       textDecorationLine: "underline",
                       fontSize: hp("2%"),
@@ -580,10 +565,18 @@ export default function Detail({ route, navigation }) {
                   </Text>
                 </View>
 
-                <View style={{ alignItems: "center", marginTop: hp("2%") }}>
+                <View
+                  style={{
+                    alignItems: "center",
+                    marginTop: hp("2%"),
+                    backgroundColor: "black",
+                    padding: 10,
+                    borderRadius: 10,
+                  }}
+                >
                   <Text
                     style={{
-                      color: "#7FFF00",
+                      color: "white",
                       fontFamily: "josefin",
                       textDecorationLine: "underline",
                       fontSize: hp("2%"),
@@ -604,10 +597,18 @@ export default function Detail({ route, navigation }) {
                     {data[deger].allytips}{" "}
                   </Text>
                 </View>
-                <View style={{ alignItems: "center", marginTop: hp("2%") }}>
+                <View
+                  style={{
+                    alignItems: "center",
+                    marginTop: hp("2%"),
+                    backgroundColor: "black",
+                    padding: 10,
+                    borderRadius: 10,
+                  }}
+                >
                   <Text
                     style={{
-                      color: "orange",
+                      color: "white",
                       fontFamily: "josefin",
                       textDecorationLine: "underline",
                       fontSize: hp("2%"),
@@ -638,7 +639,7 @@ export default function Detail({ route, navigation }) {
                 alignItems: "center",
               }}
             >
-              <ImageBackground
+              {/* <ImageBackground
                 style={{
                   width: "100%",
                   height: "100%",
@@ -651,7 +652,7 @@ export default function Detail({ route, navigation }) {
                     skin[skin.length - 2]
                   }.jpg`,
                 }}
-              ></ImageBackground>
+              ></ImageBackground> */}
               <BarChart
                 data={datas}
                 width={wp("100%")}
@@ -660,10 +661,10 @@ export default function Detail({ route, navigation }) {
                 fromZero={true}
                 withInnerLines={false}
                 chartConfig={{
-                  backgroundGradientToOpacity: 0.5,
-                  backgroundGradientFrom: "#251298",
-                  backgroundGradientTo: "#981225",
-                  backgroundGradientFromOpacity: 0.1,
+                  backgroundGradientToOpacity: 0.7,
+                  backgroundGradientFrom: "darkblue",
+                  backgroundGradientTo: "darkred",
+                  backgroundGradientFromOpacity: 0.4,
                   fillShadowGradientOpacity: 0.7,
 
                   color: (opacity = 0.1) => `rgba(255, 255, 255, ${opacity})`,
@@ -672,8 +673,8 @@ export default function Detail({ route, navigation }) {
                 }}
               />
             </View>
-            <ScrollView style={{ flex: 1 }}>
-              <ImageBackground
+            <ScrollView style={{ flex: 1 ,marginBottom:'10%'}}>
+              {/* <ImageBackground
                 style={{
                   width: "100%",
                   height: "100%",
@@ -686,7 +687,7 @@ export default function Detail({ route, navigation }) {
                     skin[skin.length - 3]
                   }.jpg`,
                 }}
-              ></ImageBackground>
+              ></ImageBackground> */}
               <View style={{ marginTop: hp("3%"), padding: wp("2.5%") }}>
                 <View
                   style={{
@@ -712,7 +713,7 @@ export default function Detail({ route, navigation }) {
                     <Text
                       style={[
                         styles.specsText,
-                        { fontFamily: "josefin", color: "orange" },
+                        { fontFamily: "josefin", color: "#ffe5b4" },
                       ]}
                     >
                       {" "}
@@ -734,7 +735,7 @@ export default function Detail({ route, navigation }) {
                     <Text
                       style={[
                         styles.specsText,
-                        { fontFamily: "josefin", color: "orange" },
+                        { fontFamily: "josefin", color: "#ffe5b4" },
                       ]}
                     >
                       {" "}
@@ -777,7 +778,7 @@ export default function Detail({ route, navigation }) {
                     <Text
                       style={[
                         styles.specsText,
-                        { fontFamily: "josefin", color: "orange" },
+                        { fontFamily: "josefin", color: "#ffe5b4" },
                       ]}
                     >
                       {" "}
@@ -862,7 +863,7 @@ export default function Detail({ route, navigation }) {
                     <Text
                       style={[
                         styles.specsText,
-                        { fontFamily: "josefin", color: "orange" },
+                        { fontFamily: "josefin", color: "#ffe5b4" },
                       ]}
                     >
                       {" "}
@@ -947,7 +948,7 @@ export default function Detail({ route, navigation }) {
                     <Text
                       style={[
                         styles.specsText,
-                        { fontFamily: "josefin", color: "orange" },
+                        { fontFamily: "josefin", color: "#ffe5b4" },
                       ]}
                     >
                       {" "}
@@ -1032,7 +1033,7 @@ export default function Detail({ route, navigation }) {
                     <Text
                       style={[
                         styles.specsText,
-                        { fontFamily: "josefin", color: "orange" },
+                        { fontFamily: "josefin", color: "#ffe5b4" },
                       ]}
                     >
                       {" "}
@@ -1094,14 +1095,14 @@ export default function Detail({ route, navigation }) {
               </View>
             </ScrollView>
           </Swiper>
-        </SafeAreaView>
+        </View>
       );
     }
   }
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <ActivityIndicator size="large" color="orange" />
+      <ActivityIndicator size="large" color="black" />
     </View>
   );
 }
@@ -1119,15 +1120,16 @@ const styles = StyleSheet.create({
   header: {
     width: "100%",
     height: "25%",
+    justifyContent:'center',
+    alignItems:'center',
+    marginTop:'2%'
   },
   info: {
     flex: 1,
-
     marginHorizontal: "2%",
-    marginVertical: "2%",
     alignItems: "center",
     justifyContent: "center",
-    padding: wp("3%"),
+    padding: wp("1%"),
   },
   wrapper: {},
   specs: {
@@ -1150,11 +1152,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: wp("1.5%"),
     alignItems: "stretch",
+    
   },
   dot: {
     width: wp("3%"),
     height: hp("1%"),
-    backgroundColor: "orange",
+    backgroundColor: "#ffe5b4",
     borderRadius: wp("1%"),
   },
 });

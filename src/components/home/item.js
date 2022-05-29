@@ -12,34 +12,35 @@ const Item = (props) => (
       style={styles.image}
       source={{ uri: props.uri }}
     ></Image>
-    <Text
+    {/* <Text
       maxFontSizeMultiplier={1}
       numberOfLines={1}
       style={[{ fontFamily: props.fontFamily }, styles.text]}
     >
       {" "}
       {props.name}{" "}
-    </Text>
+    </Text> */}
   </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
   image: {
-    width: wp("24%"),
-    height: hp("14%"),
-    borderRadius: wp("2%"),
+    width:'100%',
+    height:'100%',
+    borderRadius:25
   },
   hero: {
-    width: wp("30%"),
+    width: wp("96%"),
     height: hp("25%"),
-    marginHorizontal: "0.6%",
-    alignItems: "center",
-    marginBottom: "2%",
-    justifyContent: "center",
+    borderRadius:10,
+    marginBottom:wp('2%'),
+    borderWidth:2,
+    shadowColor:'black',
+    elevation:8
   },
   text: {
-    fontSize: hp("2%"),
-    color: "white",
+    fontSize: hp("3%"),
+    color: "black",
     textAlign: "center",
     width: wp("30%"),
   },
