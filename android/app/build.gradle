@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.urgenakif.lol_heros'
+        applicationId 'com.urgenakif.lol_guides'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 4

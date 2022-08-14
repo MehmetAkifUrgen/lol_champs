@@ -139,7 +139,7 @@ export default function Detail({ route, navigation }) {
   }
   async function odul() {
     await AdMobInterstitial.setAdUnitID(
-      "ca-app-pub-7956816566156883/1481637553"
+      "ca-app-pub-7956816566156883/7255609618"
     );
     await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
     await AdMobInterstitial.showAdAsync();
