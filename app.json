@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Leauge of Legends Guide",
-    "slug": "lol_guides",
-    "version": "1.1.1",
+    "name": "LOL Heroes",
+    "slug": "lol_heroes",
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -13,21 +13,20 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
+
     "android": {
-      "versionCode": 2,
+      "versionCode": 10,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.urgenakif.lol_guides",
+      "package": "com.urgenakif.lol_heros",
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-7956816566156883~2496454561"
+        "googleMobileAdsAppId": "ca-app-pub-7956816566156883~3951478134"
       },
       "googleServicesFile": "./google-services.json",
       "permissions": [
@@ -50,19 +49,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "expo-build-properties",
-      {
-        "android": {
-          "compileSdkVersion": 31,
-          "targetSdkVersion": 31,
-          "buildToolsVersion": "31.0.0"
-        },
-        "ios": {
-          "deploymentTarget": "13.0"
-        }
-      }
-    ]
+    }
   }
 }

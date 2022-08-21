@@ -7,7 +7,7 @@ import {
   TextInput,
   Image,
   FlatList,
-  Share,
+  SafeAreaView,
   ImageBackground,
   Platform,
   KeyboardAvoidingView,
@@ -39,34 +39,13 @@ export default function App({ navigation }) {
     josefin: require("../../assets/JosefinSans-Medium.ttf"),
   });
 
-  const onShare = async () => {
-    await Share.share({
-      title: "App link",
-      message: "https://sparc.world",
-      url: "https://sparc.world",
-    });
-  };
-
-  function getAccount() {
-    
-   
-  }
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerStyle: {
-        backgroundColor: "black",
+      headerStyle:{
+        backgroundColor:'black'
       },
-      headerTintColor: "white",
+      headerTintColor:'white',
       headerRight: () => menu(),
-      headerLeft: () => (
-        <Icon
-          onPress={onShare}
-          style={{ marginLeft: 10 }}
-          name="share"
-          color="white"
-        />
-      ),
     });
   }, [navigation]);
 
@@ -155,7 +134,7 @@ export default function App({ navigation }) {
     normalYap();
     getVersion();
     setIsLoading(true);
-    getAccount
+
     if (version[0] != null) {
       getChampionsName();
     }
@@ -260,24 +239,28 @@ export default function App({ navigation }) {
               }}
             >
               <LanguageItem
+                
                 text="English"
                 onPress={() => {
                   setLanguage("en_US"), setVisible(false);
                 }}
               />
               <LanguageItem
+              
                 text="Deutsch"
                 onPress={() => {
                   setLanguage("de_De"), setVisible(false);
                 }}
               />
               <LanguageItem
+                
                 text="Español"
                 onPress={() => {
                   setLanguage("es_ES"), setVisible(false);
                 }}
               />
               <LanguageItem
+                
                 text="Français"
                 onPress={() => {
                   setLanguage("fr_FR"), setVisible(false);
@@ -285,11 +268,13 @@ export default function App({ navigation }) {
               />
               <LanguageItem
                 text="Türkçe"
+               
                 onPress={() => {
                   setLanguage("tr_TR"), setVisible(false);
                 }}
               />
               <LanguageItem
+              
                 text="Italiano"
                 onPress={() => {
                   setLanguage("it_IT"), setVisible(false);
@@ -328,10 +313,9 @@ export default function App({ navigation }) {
             horizontal={false}
             initialNumToRender={4}
           />
-          
           <AdMobBanner
             bannerSize="fullBanner"
-            adUnitID="ca-app-pub-7956816566156883/3507936293"
+            adUnitID="ca-app-pub-7956816566156883/1667046797"
             servePersonalizedAds // true or false
           />
         </View>
@@ -382,6 +366,7 @@ const styles = StyleSheet.create({
   },
   text_Input: {
     backgroundColor: "#fff",
+    
   },
   text_Input_Viewport: {
     marginHorizontal: "20%",
@@ -391,7 +376,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-
+    
     borderRadius: wp("1%"),
     borderWidth: 1,
     shadowColor: "black",
@@ -403,7 +388,9 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     position: "absolute",
   },
-  icon: {},
+  icon: {
+    
+  },
   menu: {
     position: "relative",
     zIndex: 100,
