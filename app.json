@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "LOL Heroes",
-    "slug": "lol_heroes",
-    "version": "1.0.9",
+    "name": "League of Legends Guide",
+    "slug": "lol_guides",
+    "version": "1.0.14",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,14 +17,15 @@
     "ios": {
       "supportsTablet": true
     },
+    
 
     "android": {
-      "versionCode": 10,
+      "versionCode": 15,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.urgenakif.lol_heros",
+      "package": "com.urgenakif.lol_guides",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-7956816566156883~3951478134"
       },

@@ -30,7 +30,7 @@ import com.android.build.OutputFile
  *   bundleInRelease: true,
  *
  *   // whether to bundle JS and assets in another build variant (if configured).
- *   // See http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Build-Variants
+ *   // See http://tools.android.com/tech-docs/new-build-system/user-guides#TOC-Build-Variants
  *   // The configuration property can be in the following formats
  *   //         'bundleIn${productFlavor}${buildType}'
  *   //         'bundleIn${buildType}'
@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.urgenakif.lol_heros'
+        applicationId 'com.urgenakif.lol_guides'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 4

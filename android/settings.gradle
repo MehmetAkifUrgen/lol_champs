@@ -1,4 +1,4 @@
-rootProject.name = 'lol_heros'
+rootProject.name = 'lol_guides'
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()

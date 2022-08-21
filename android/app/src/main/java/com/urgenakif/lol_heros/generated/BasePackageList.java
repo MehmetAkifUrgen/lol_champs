@@ -1,4 +1,4 @@
-package com.urgenakif.lol_heros.generated;
+package com.urgenakif.lol_guides.generated;
 
 import java.util.Arrays;
 import java.util.List;

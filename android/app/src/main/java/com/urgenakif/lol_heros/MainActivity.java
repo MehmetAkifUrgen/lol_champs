@@ -1,4 +1,4 @@
-package com.urgenakif.lol_heros;
+package com.urgenakif.lol_guides;
 import android.content.res.Configuration;
 import android.content.Intent;
 
